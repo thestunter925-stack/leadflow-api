@@ -10,28 +10,34 @@ const { checkDatabase } = require("./db");
 
 const app = express();
 
-const PORT = Number(process.env.PORT || 3000);
+const PORT = Number(
+  process.env.PORT || 3000
+);
 
 
-/* ================================
+/* =====================================================
    SECURITY
-================================ */
+===================================================== */
 
 app.disable("x-powered-by");
 
-app.use(helmet());
+app.use(
+  helmet()
+);
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || true,
+    origin:
+      process.env.FRONTEND_URL || true,
+
     credentials: true
   })
 );
 
 
-/* ================================
-   REQUEST BODY
-================================ */
+/* =====================================================
+   BODY PARSER
+===================================================== */
 
 app.use(
   express.json({
@@ -40,22 +46,28 @@ app.use(
 );
 
 
-/* ================================
-   RATE LIMITING
-================================ */
+/* =====================================================
+   API RATE LIMIT
+===================================================== */
 
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 300,
-  standardHeaders: true,
-  legacyHeaders: false,
+const apiLimiter =
+  rateLimit({
+    windowMs:
+      15 * 60 * 1000,
 
-  message: {
-    success: false,
-    message:
-      "Too many requests. Please try again later."
-  }
-});
+    limit: 300,
+
+    standardHeaders: true,
+
+    legacyHeaders: false,
+
+    message: {
+      success: false,
+      message:
+        "Too many requests. Please try again later."
+    }
+  });
+
 
 app.use(
   "/api",
@@ -63,24 +75,36 @@ app.use(
 );
 
 
-/* ================================
+/* =====================================================
    HOME
-================================ */
+===================================================== */
 
-app.get("/", (req, res) => {
+app.get(
+  "/",
+  (req, res) => {
 
-  res.json({
-    success: true,
-    service: "LeadFlow AI Backend",
-    status: "online"
-  });
+    res.json({
 
-});
+      success: true,
+
+      service:
+        "LeadFlow AI Backend",
+
+      status:
+        "online",
+
+      version:
+        "1.0.0"
+
+    });
+
+  }
+);
 
 
-/* ================================
+/* =====================================================
    HEALTH CHECK
-================================ */
+===================================================== */
 
 app.get(
   "/api/health",
@@ -95,9 +119,11 @@ app.get(
 
         success: true,
 
-        api: "online",
+        api:
+          "online",
 
-        database: "connected",
+        database:
+          "connected",
 
         time:
           database.time
@@ -107,7 +133,7 @@ app.get(
     } catch (error) {
 
       console.error(
-        "Database error:",
+        "Health check failed:",
         error
       );
 
@@ -115,9 +141,11 @@ app.get(
 
         success: false,
 
-        api: "online",
+        api:
+          "online",
 
-        database: "unavailable"
+        database:
+          "unavailable"
 
       });
 
@@ -127,9 +155,9 @@ app.get(
 );
 
 
-/* ================================
-   API ROUTES
-================================ */
+/* =====================================================
+   APPLICATION ROUTES
+===================================================== */
 
 app.use(
   "/api",
@@ -137,9 +165,9 @@ app.use(
 );
 
 
-/* ================================
-   NOT FOUND
-================================ */
+/* =====================================================
+   404 HANDLER
+===================================================== */
 
 app.use(
   (req, res) => {
@@ -157,15 +185,15 @@ app.use(
 );
 
 
-/* ================================
-   ERROR HANDLER
-================================ */
+/* =====================================================
+   GLOBAL ERROR HANDLER
+===================================================== */
 
 app.use(
   (error, req, res, next) => {
 
     console.error(
-      "Unhandled error:",
+      "Unhandled server error:",
       error
     );
 
@@ -182,9 +210,9 @@ app.use(
 );
 
 
-/* ================================
-   START SERVER
-================================ */
+/* =====================================================
+   START
+===================================================== */
 
 async function startServer() {
 
@@ -193,7 +221,7 @@ async function startServer() {
     await checkDatabase();
 
     console.log(
-      "Database connection successful."
+      "PostgreSQL connection successful."
     );
 
     app.listen(
@@ -201,7 +229,7 @@ async function startServer() {
       () => {
 
         console.log(
-          `LeadFlow AI server running on port ${PORT}`
+          `LeadFlow AI running on port ${PORT}`
         );
 
       }
@@ -210,7 +238,7 @@ async function startServer() {
   } catch (error) {
 
     console.error(
-      "Server startup failed:"
+      "Server startup failed."
     );
 
     console.error(
