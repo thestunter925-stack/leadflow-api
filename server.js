@@ -3,45 +3,35 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 
-const {
-  createUser,
-  authenticateUser
-} = require("./auth");
-
-const {
-  createSession,
-  deleteSession,
-  requireAuth
-} = require("./session");
-
-const {
-  checkDatabase
-} = require("./db");
-
+const routes = require("./routes");
+const { checkDatabase } = require("./db");
 
 const app = express();
 
-const PORT =
-  process.env.PORT || 3000;
+const PORT = Number(process.env.PORT || 3000);
 
 
-/* ============================================
-   SECURITY / MIDDLEWARE
-============================================ */
+/* ================================
+   SECURITY
+================================ */
 
-app.use(
-  helmet()
-);
+app.disable("x-powered-by");
+
+app.use(helmet());
 
 app.use(
   cors({
-    origin:
-      process.env.FRONTEND_URL || true,
-
+    origin: process.env.FRONTEND_URL || true,
     credentials: true
   })
 );
+
+
+/* ================================
+   REQUEST BODY
+================================ */
 
 app.use(
   express.json({
@@ -50,26 +40,47 @@ app.use(
 );
 
 
-/* ============================================
-   HEALTH
-============================================ */
+/* ================================
+   RATE LIMITING
+================================ */
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+
+  message: {
+    success: false,
+    message:
+      "Too many requests. Please try again later."
+  }
+});
+
+app.use(
+  "/api",
+  apiLimiter
+);
+
+
+/* ================================
+   HOME
+================================ */
 
 app.get("/", (req, res) => {
 
   res.json({
-
     success: true,
-
-    service:
-      "LeadFlow AI Backend",
-
-    status:
-      "online"
-
+    service: "LeadFlow AI Backend",
+    status: "online"
   });
 
 });
 
+
+/* ================================
+   HEALTH CHECK
+================================ */
 
 app.get(
   "/api/health",
@@ -84,13 +95,11 @@ app.get(
 
         success: true,
 
-        api:
-          "online",
+        api: "online",
 
-        database:
-          "connected",
+        database: "connected",
 
-        serverTime:
+        time:
           database.time
 
       });
@@ -98,7 +107,7 @@ app.get(
     } catch (error) {
 
       console.error(
-        "Database health error:",
+        "Database error:",
         error
       );
 
@@ -106,11 +115,9 @@ app.get(
 
         success: false,
 
-        api:
-          "online",
+        api: "online",
 
-        database:
-          "unavailable"
+        database: "unavailable"
 
       });
 
@@ -120,448 +127,19 @@ app.get(
 );
 
 
-/* ============================================
-   SIGNUP
-============================================ */
+/* ================================
+   API ROUTES
+================================ */
 
-app.post(
-  "/api/auth/signup",
-  async (req, res) => {
-
-    try {
-
-      const {
-        email,
-        password
-      } = req.body;
-
-      if (!email || !password) {
-
-        return res.status(400).json({
-
-          success: false,
-
-          message:
-            "Email and password are required."
-
-        });
-
-      }
-
-      const user =
-        await createUser(
-          email,
-          password
-        );
-
-      const session =
-        await createSession(
-          user.id
-        );
-
-      res.status(201).json({
-
-        success: true,
-
-        user,
-
-        token:
-          session.token,
-
-        expiresAt:
-          session.expiresAt
-
-      });
-
-    } catch (error) {
-
-      console.error(
-        "Signup error:",
-        error
-      );
-
-      res.status(400).json({
-
-        success: false,
-
-        message:
-          error.message ||
-          "Unable to create account."
-
-      });
-
-    }
-
-  }
+app.use(
+  "/api",
+  routes
 );
 
 
-/* ============================================
-   LOGIN
-============================================ */
-
-app.post(
-  "/api/auth/login",
-  async (req, res) => {
-
-    try {
-
-      const {
-        email,
-        password
-      } = req.body;
-
-      if (!email || !password) {
-
-        return res.status(400).json({
-
-          success: false,
-
-          message:
-            "Email and password are required."
-
-        });
-
-      }
-
-      const user =
-        await authenticateUser(
-          email,
-          password
-        );
-
-      const session =
-        await createSession(
-          user.id
-        );
-
-      res.json({
-
-        success: true,
-
-        user,
-
-        token:
-          session.token,
-
-        expiresAt:
-          session.expiresAt
-
-      });
-
-    } catch (error) {
-
-      console.error(
-        "Login error:",
-        error
-      );
-
-      res.status(401).json({
-
-        success: false,
-
-        message:
-          "Invalid email or password."
-
-      });
-
-    }
-
-  }
-);
-
-
-/* ============================================
-   LOGOUT
-============================================ */
-
-app.post(
-  "/api/auth/logout",
-  requireAuth,
-  async (req, res) => {
-
-    try {
-
-      await deleteSession(
-        req.sessionToken
-      );
-
-      res.json({
-
-        success: true,
-
-        message:
-          "Logged out successfully."
-
-      });
-
-    } catch (error) {
-
-      console.error(
-        "Logout error:",
-        error
-      );
-
-      res.status(500).json({
-
-        success: false,
-
-        message:
-          "Unable to logout."
-
-      });
-
-    }
-
-  }
-);
-
-
-/* ============================================
-   CURRENT USER
-============================================ */
-
-app.get(
-  "/api/me",
-  requireAuth,
-  (req, res) => {
-
-    res.json({
-
-      success: true,
-
-      user:
-        req.user
-
-    });
-
-  }
-);
-
-
-/* ============================================
-   USAGE
-============================================ */
-
-app.get(
-  "/api/usage",
-  requireAuth,
-  async (req, res) => {
-
-    try {
-
-      const {
-        query
-      } = require("./db");
-
-      const result =
-        await query(
-          `
-          SELECT
-            prospect_searches,
-            prospects_viewed,
-            saved_leads,
-            outreach_generated
-          FROM user_usage
-          WHERE user_id = $1
-          `,
-          [req.user.id]
-        );
-
-      const usage =
-        result.rows[0] || {
-
-          prospect_searches: 0,
-
-          prospects_viewed: 0,
-
-          saved_leads: 0,
-
-          outreach_generated: 0
-
-        };
-
-      const unlimited =
-        req.user.role ===
-        "owner";
-
-      res.json({
-
-        success: true,
-
-        unlimited,
-
-        prospectsRemaining:
-          unlimited
-            ? null
-            : Math.max(
-                0,
-                10 -
-                usage.prospect_searches
-              ),
-
-        hoursRemaining:
-          unlimited
-            ? null
-            : calculateHoursRemaining(
-                req.user
-              ),
-
-        ...usage
-
-      });
-
-    } catch (error) {
-
-      console.error(
-        "Usage error:",
-        error
-      );
-
-      res.status(500).json({
-
-        success: false,
-
-        message:
-          "Unable to load usage."
-
-      });
-
-    }
-
-  }
-);
-
-
-/* ============================================
-   PROSPECTS
-============================================ */
-
-app.get(
-  "/api/leads",
-  requireAuth,
-  async (req, res) => {
-
-    try {
-
-      const {
-        query
-      } = require("./db");
-
-      const result =
-        await query(
-          `
-          SELECT *
-          FROM prospects
-          ORDER BY created_at DESC
-          LIMIT 100
-          `
-        );
-
-      res.json({
-
-        success: true,
-
-        leads:
-          result.rows
-
-      });
-
-    } catch (error) {
-
-      console.error(
-        "Lead error:",
-        error
-      );
-
-      res.status(500).json({
-
-        success: false,
-
-        message:
-          "Unable to load prospects."
-
-      });
-
-    }
-
-  }
-);
-
-
-/* ============================================
-   SEARCH PLACEHOLDER
-============================================ */
-
-app.post(
-  "/api/leads/search",
-  requireAuth,
-  (req, res) => {
-
-    res.status(501).json({
-
-      success: false,
-
-      message:
-        "A legitimate prospect data provider has not been connected yet."
-
-    });
-
-  }
-);
-
-
-/* ============================================
-   PAYMENT PLACEHOLDER
-============================================ */
-
-app.post(
-  "/api/payment/create",
-  requireAuth,
-  (req, res) => {
-
-    res.status(501).json({
-
-      success: false,
-
-      message:
-        "Payment provider integration is not configured yet."
-
-    });
-
-  }
-);
-
-
-/* ============================================
-   PAYMENT STATUS
-============================================ */
-
-app.get(
-  "/api/payment/status",
-  requireAuth,
-  (req, res) => {
-
-    res.json({
-
-      success: true,
-
-      premium:
-        req.user.role === "owner" ||
-        req.user.plan === "premium",
-
-      user:
-        req.user
-
-    });
-
-  }
-);
-
-
-/* ============================================
-   404
-============================================ */
+/* ================================
+   NOT FOUND
+================================ */
 
 app.use(
   (req, res) => {
@@ -571,7 +149,7 @@ app.use(
       success: false,
 
       message:
-        "API endpoint not found."
+        "Endpoint not found."
 
     });
 
@@ -579,15 +157,15 @@ app.use(
 );
 
 
-/* ============================================
+/* ================================
    ERROR HANDLER
-============================================ */
+================================ */
 
 app.use(
   (error, req, res, next) => {
 
     console.error(
-      "Server error:",
+      "Unhandled error:",
       error
     );
 
@@ -604,50 +182,46 @@ app.use(
 );
 
 
-/* ============================================
-   TRIAL HOURS
-============================================ */
+/* ================================
+   START SERVER
+================================ */
 
-function calculateHoursRemaining(
-  user
-) {
+async function startServer() {
 
-  if (
-    !user.trial_expires_at
-  ) {
+  try {
 
-    return 0;
+    await checkDatabase();
+
+    console.log(
+      "Database connection successful."
+    );
+
+    app.listen(
+      PORT,
+      () => {
+
+        console.log(
+          `LeadFlow AI server running on port ${PORT}`
+        );
+
+      }
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Server startup failed:"
+    );
+
+    console.error(
+      error.message
+    );
+
+    process.exit(1);
 
   }
-
-  const difference =
-    new Date(
-      user.trial_expires_at
-    ).getTime() -
-    Date.now();
-
-  return Math.max(
-    0,
-    Math.round(
-      difference /
-      (1000 * 60 * 60)
-    )
-  );
 
 }
 
 
-/* ============================================
-   START
-============================================ */
-
-app.listen(
-  PORT,
-  () => {
-
-    console.log(
-      `LeadFlow AI Backend running on port ${PORT}`
-    );
-
-  }
-);
+startServer();
