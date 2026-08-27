@@ -1,70 +1,120 @@
 const crypto = require("crypto");
-const { query } = require("./db");
+
+const {
+  query
+} = require("./db");
 
 
-/* ============================================
+/* =====================================================
    PASSWORD HASHING
-============================================ */
+===================================================== */
 
 function hashPassword(password) {
 
   const salt =
-    crypto.randomBytes(16).toString("hex");
+    crypto.randomBytes(16);
 
   const hash =
-    crypto
-      .scryptSync(password, salt, 64)
-      .toString("hex");
+    crypto.scryptSync(
+      password,
+      salt,
+      64
+    );
 
-  return `${salt}:${hash}`;
+  return [
+    salt.toString("hex"),
+    hash.toString("hex")
+  ].join(":");
+
 }
 
+
+/* =====================================================
+   PASSWORD VERIFICATION
+===================================================== */
 
 function verifyPassword(
   password,
   storedPassword
 ) {
 
-  const parts =
-    String(storedPassword).split(":");
+  try {
 
-  if (parts.length !== 2) {
+    const parts =
+      String(
+        storedPassword
+      ).split(":");
+
+    if (
+      parts.length !== 2
+    ) {
+
+      return false;
+
+    }
+
+    const salt =
+      Buffer.from(
+        parts[0],
+        "hex"
+      );
+
+    const storedHash =
+      Buffer.from(
+        parts[1],
+        "hex"
+      );
+
+    const hash =
+      crypto.scryptSync(
+        password,
+        salt,
+        64
+      );
+
+    return (
+      hash.length ===
+        storedHash.length &&
+      crypto.timingSafeEqual(
+        hash,
+        storedHash
+      )
+    );
+
+  } catch {
+
     return false;
+
   }
 
-  const [salt, storedHash] =
-    parts;
-
-  const hash =
-    crypto
-      .scryptSync(password, salt, 64)
-      .toString("hex");
-
-  return crypto.timingSafeEqual(
-    Buffer.from(hash, "hex"),
-    Buffer.from(storedHash, "hex")
-  );
-
 }
 
 
-/* ============================================
+/* =====================================================
    EMAIL VALIDATION
-============================================ */
+===================================================== */
 
-function validEmail(email) {
+function validEmail(
+  email
+) {
 
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    .test(String(email));
+    .test(
+      String(email)
+        .trim()
+        .toLowerCase()
+    );
 
 }
 
 
-/* ============================================
+/* =====================================================
    FIND USER
-============================================ */
+===================================================== */
 
-async function findUserByEmail(email) {
+async function findUserByEmail(
+  email
+) {
 
   const result =
     await query(
@@ -74,33 +124,86 @@ async function findUserByEmail(email) {
       WHERE LOWER(email) = LOWER($1)
       LIMIT 1
       `,
-      [email]
+      [
+        String(email)
+          .trim()
+          .toLowerCase()
+      ]
     );
 
-  return result.rows[0] || null;
+  return (
+    result.rows[0] ||
+    null
+  );
 
 }
 
 
-/* ============================================
+/* =====================================================
+   FIND USER BY ID
+===================================================== */
+
+async function findUserById(
+  userId
+) {
+
+  const result =
+    await query(
+      `
+      SELECT
+        id,
+        email,
+        role,
+        plan,
+        trial_started_at,
+        trial_expires_at,
+        premium_started_at,
+        premium_expires_at,
+        created_at
+      FROM users
+      WHERE id = $1
+      LIMIT 1
+      `,
+      [userId]
+    );
+
+  return (
+    result.rows[0] ||
+    null
+  );
+
+}
+
+
+/* =====================================================
    CREATE USER
-============================================ */
+===================================================== */
 
 async function createUser(
   email,
   password
 ) {
 
-  if (!validEmail(email)) {
+  const cleanEmail =
+    String(email)
+      .trim()
+      .toLowerCase();
+
+  if (
+    !validEmail(
+      cleanEmail
+    )
+  ) {
 
     throw new Error(
-      "Invalid email address."
+      "Enter a valid email address."
     );
 
   }
 
   if (
-    typeof password !== "string" ||
+    typeof password !==
+      "string" ||
     password.length < 8
   ) {
 
@@ -111,7 +214,9 @@ async function createUser(
   }
 
   const existing =
-    await findUserByEmail(email);
+    await findUserByEmail(
+      cleanEmail
+    );
 
   if (existing) {
 
@@ -122,7 +227,9 @@ async function createUser(
   }
 
   const passwordHash =
-    hashPassword(password);
+    hashPassword(
+      password
+    );
 
   const result =
     await query(
@@ -136,7 +243,7 @@ async function createUser(
         trial_expires_at
       )
       VALUES (
-        LOWER($1),
+        $1,
         $2,
         'user',
         'trial',
@@ -150,10 +257,12 @@ async function createUser(
         plan,
         trial_started_at,
         trial_expires_at,
+        premium_started_at,
+        premium_expires_at,
         created_at
       `,
       [
-        email.trim(),
+        cleanEmail,
         passwordHash
       ]
     );
@@ -167,6 +276,8 @@ async function createUser(
       user_id
     )
     VALUES ($1)
+    ON CONFLICT (user_id)
+    DO NOTHING
     `,
     [user.id]
   );
@@ -176,18 +287,23 @@ async function createUser(
 }
 
 
-/* ============================================
+/* =====================================================
    AUTHENTICATE USER
-============================================ */
+===================================================== */
 
 async function authenticateUser(
   email,
   password
 ) {
 
+  const cleanEmail =
+    String(email)
+      .trim()
+      .toLowerCase();
+
   const user =
     await findUserByEmail(
-      String(email).trim()
+      cleanEmail
     );
 
   if (!user) {
@@ -213,29 +329,94 @@ async function authenticateUser(
   }
 
   return {
-    id: user.id,
-    email: user.email,
-    role: user.role,
-    plan: user.plan,
-    trialExpiresAt:
+
+    id:
+      user.id,
+
+    email:
+      user.email,
+
+    role:
+      user.role,
+
+    plan:
+      user.plan,
+
+    trial_started_at:
+      user.trial_started_at,
+
+    trial_expires_at:
       user.trial_expires_at,
-    premiumExpiresAt:
+
+    premium_started_at:
+      user.premium_started_at,
+
+    premium_expires_at:
       user.premium_expires_at
+
   };
 
 }
 
 
-/* ============================================
+/* =====================================================
    OWNER CHECK
-============================================ */
+===================================================== */
 
-function isOwner(user) {
+function isOwner(
+  user
+) {
 
   return Boolean(
     user &&
     user.role === "owner"
   );
+
+}
+
+
+/* =====================================================
+   PUBLIC USER OBJECT
+===================================================== */
+
+function publicUser(
+  user
+) {
+
+  if (!user) {
+    return null;
+  }
+
+  return {
+
+    id:
+      user.id,
+
+    email:
+      user.email,
+
+    role:
+      user.role,
+
+    plan:
+      user.plan,
+
+    trial_started_at:
+      user.trial_started_at,
+
+    trial_expires_at:
+      user.trial_expires_at,
+
+    premium_started_at:
+      user.premium_started_at,
+
+    premium_expires_at:
+      user.premium_expires_at,
+
+    created_at:
+      user.created_at
+
+  };
 
 }
 
@@ -250,10 +431,14 @@ module.exports = {
 
   findUserByEmail,
 
+  findUserById,
+
   createUser,
 
   authenticateUser,
 
-  isOwner
+  isOwner,
+
+  publicUser
 
 };
