@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<meta name="description" content="LeadFlow API - Lead generation and CRM platform">
+<title>LeadFlow API</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#667085;--border:#e5e7eb;--primary:#2563eb;--primary2:#1d4ed8;--success:#16a34a;--danger:#dc2626;--warning:#d97706;--shadow:0 10px 30px rgba(15,23,42,.07)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.app{min-height:100vh}.sidebar{position:fixed;z-index:30;left:0;top:0;bottom:0;width:250px;background:#101828;color:#fff;padding:20px 14px}.brand{font-size:23px;font-weight:800;padding:8px 12px 24px}.brand span{color:#60a5fa}.nav button{display:block;width:100%;border:0;background:transparent;color:#cbd5e1;text-align:left;padding:11px 12px;border-radius:9px;margin:2px 0}.nav button:hover,.nav button.active{background:#1d4ed8;color:#fff}.main{margin-left:250px;padding:24px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.title{display:flex;align-items:center;gap:10px}.title h1{margin:0;font-size:26px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:10px;padding:10px 15px;font-weight:700}.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}.btn.primary:hover{background:var(--primary2)}.btn.danger{background:var(--danger);border-color:var(--danger);color:#fff}.page{display:none}.page.active{display:block}.hero,.card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:20px;margin-bottom:18px}.hero h2,.hero h1,.card h2,.card h3{margin-top:0}.muted{color:var(--muted)}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.metric{font-size:30px;font-weight:800;margin-top:7px}.metric-label{font-size:13px;color:var(--muted)}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}.toolbar input{max-width:340px}.toolbar select{max-width:190px}input,select,textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:11px;background:var(--card);color:var(--text);outline:none}input:focus,select:focus,textarea:focus{border-color:var(--primary)}.table-wrap{overflow:auto}.table{width:100%;min-width:760px;border-collapse:collapse}.table th,.table td{text-align:left;padding:12px 9px;border-bottom:1px solid var(--border)}.table th{font-size:12px;color:var(--muted);text-transform:uppercase}.badge{display:inline-block;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:700}.new{background:#dbeafe;color:#1d4ed8}.contacted{background:#fef3c7;color:#92400e}.qualified{background:#dcfce7;color:#166534}.converted{background:#d1fae5;color:#065f46}.lost{background:#fee2e2;color:#991b1b}.icon{border:0;background:#eef2f7;border-radius:8px;padding:7px}.empty{text-align:center;color:var(--muted);padding:35px}.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.prospect{border:1px solid var(--border);border-radius:14px;padding:16px;background:var(--card)}.prospect h3{margin:0 0 5px}.prospect .row{display:flex;justify-content:space-between;gap:10px;margin-top:9px;font-size:13px}.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.58);z-index:100;align-items:center;justify-content:center;padding:15px}.modal-overlay.show{display:flex}.modal{width:min(680px,100%);max-height:92vh;overflow:auto;background:var(--card);border-radius:18px}.modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border)}.modal-header h2{margin:0}.close{border:0;background:none;font-size:26px;color:var(--muted)}.form{padding:20px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}.full{grid-column:1/-1}.notice{padding:12px;border-radius:10px;background:#eff6ff;color:#1d4ed8;margin-top:12px}.error{padding:12px;border-radius:10px;background:#fef2f2;color:#991b1b;margin-top:12px}.success{padding:12px;border-radius:10px;background:#f0fdf4;color:#166534;margin-top:12px}.pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;overflow:auto}.stage{min-width:190px;background:#eef2f7;border-radius:13px;padding:12px}.lead-mini{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px;margin-bottom:9px}.lead-mini strong{display:block}.mobile-menu{display:none}
+body.dark{--bg:#0b1220;--card:#111827;--text:#f1f5f9;--muted:#94a3b8;--border:#243044}.dark .stage{background:#172033}
+@media(max-width:1000px){.grid4{grid-template-columns:repeat(2,1fr)}.pipeline{grid-template-columns:repeat(5,190px)}}
+@media(max-width:700px){.sidebar{transform:translateX(-100%);transition:.2s}.sidebar.open{transform:translateX(0)}.main{margin-left:0;padding:15px}.mobile-menu{display:inline-block}.grid2,.result-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.topbar{align-items:flex-start}.title h1{font-size:21px}}
+@media(max-width:430px){.grid4{grid-template-columns:1fr 1fr}.top-actions .optional{display:none}}
+</style>
+</head>
+<body>
+
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand">Lead<span>Flow</span> API</div>
+  <div class="nav">
+    <button class="active" data-page="dashboard">📊 Dashboard</button>
+    <button data-page="clients">🔎 Find Clients</button>
+    <button data-page="prospects">🎯 Prospects</button>
+    <button data-page="crm">👥 CRM</button>
+    <button data-page="premium">⭐ Premium</button>
+    <button data-page="settings">⚙️ Settings</button>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="title">
+      <button class="btn mobile-menu" id="menuBtn">☰</button>
+      <h1 id="pageTitle">Dashboard</h1>
+    </div>
+    <div class="actions">
+      <button class="btn optional" id="healthBtn">API Status</button>
+      <button class="btn primary" id="addLeadBtn">+ Add Lead</button>
+    </div>
+  </div>
+
+  <section id="dashboard" class="page active">
+    <div class="hero">
+      <h2>LeadFlow API</h2>
+      <p class="muted">Find prospects, manage leads and run your outreach workflow from one dashboard.</p>
+      <div id="membershipStatus" class="notice">Checking account status...</div>
+    </div>
+    <div class="grid4">
+      <div class="card"><div class="metric-label">Total Leads</div><div class="metric" id="statTotal">0</div></div>
+      <div class="card"><div class="metric-label">New</div><div class="metric" id="statNew">0</div></div>
+      <div class="card"><div class="metric-label">Qualified</div><div class="metric" id="statQualified">0</div></div>
+      <div class="card"><div class="metric-label">Converted</div><div class="metric" id="statConverted">0</div></div>
+    </div>
+    <div class="grid2">
+      <div class="card"><h2>Recent Leads</h2><div id="recentLeads"></div></div>
+      <div class="card"><h2>Usage</h2><div id="usageBox" class="muted">Loading usage...</div></div>
+    </div>
+  </section>
+
+  <section id="clients" class="page">
+    <div class="hero">
+      <h2>🔎 Find Clients</h2>
+      <p class="muted">Use the API to discover potential clients by industry, location and company size.</p>
+    </div>
+    <div class="card">
+      <form id="clientSearchForm">
+        <div class="form-grid">
+          <div class="field"><label>Industry / Keyword</label><input id="clientKeyword" placeholder="B2B SaaS, marketing agency, AI..."></div>
+          <div class="field"><label>Location</label><input id="clientLocation" placeholder="Bengaluru, India"></div>
+          <div class="field"><label>Company Size</label><select id="clientSize"><option value="">Any size</option><option>1-10</option><option>11-50</option><option>51-200</option><option>201-500</option></select></div>
+          <div class="field"><label>Decision Maker</label><input id="clientTitle" placeholder="Founder, CEO, Head of Growth"></div>
+          <div class="field full"><button class="btn primary" type="submit" id="searchClientsBtn">Search Clients</button></div>
+        </div>
+      </form>
+      <div id="clientMessage"></div>
+    </div>
+    <div id="clientResults" class="result-grid"></div>
+  </section>
+
+  <section id="prospects" class="page">
+    <div class="card">
+      <h2>🎯 Prospects</h2>
+      <p class="muted">Your saved prospect workspace.</p>
+      <div class="toolbar">
+        <input id="prospectSearch" placeholder="Search prospects..." oninput="renderProspects()">
+        <button class="btn" onclick="loadProspects()">Refresh</button>
+      </div>
+      <div id="prospectResults" class="result-grid"></div>
+    </div>
+  </section>
+
+  <section id="crm" class="page">
+    <div class="card">
+      <div class="toolbar">
+        <input id="leadSearch" placeholder="Search leads..." oninput="filterLeads()">
+        <select id="leadFilter" onchange="filterLeads()"><option value="">All statuses</option><option>New</option><option>Contacted</option><option>Qualified</option><option>Converted</option><option>Lost</option></select>
+        <button class="btn primary" onclick="addLead()">+ Add Lead</button>
+      </div>
+      <div class="table-wrap">
+        <table class="table"><thead><tr><th>Name</th><th>Company</th><th>Email</th><th>Status</th><th>Source</th><th>Actions</th></tr></thead><tbody id="leadsTable"></tbody></table>
+      </div>
+    </div>
+  </section>
+
+  <section id="premium" class="page">
+    <div class="card">
+      <h2>⭐ LeadFlow Premium</h2>
+      <p class="muted">Unlock higher usage limits and premium lead-generation workflows.</p>
+      <div class="grid2">
+        <div class="card"><h3>Free</h3><p class="muted">Basic client discovery and CRM.</p><strong>Limited usage</strong></div>
+        <div class="card"><h3>Premium</h3><p class="muted">Higher API usage and premium workflows.</p><strong id="premiumPrice">₹499</strong></div>
+      </div>
+      <div id="paymentMessage"></div>
+      <div class="form-grid" style="margin-top:15px">
+        <div class="field"><label>Payment ID</label><input id="paymentIdInput" placeholder="Generated by backend"></div>
+        <div class="field"><label>UPI Transaction Reference</label><input id="referenceInput" placeholder="Enter actual transaction reference"></div>
+        <div class="field full actions">
+          <button class="btn primary" id="createPaymentBtn">Create Payment Request</button>
+          <button class="btn" id="submitReferenceBtn">Submit Reference</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="settings" class="page">
+    <div class="card">
+      <h2>⚙️ Settings</h2>
+      <div class="list-item" style="padding:14px 0;border-bottom:1px solid var(--border)">
+        <strong>Account</strong><div class="muted" id="accountEmail">Not signed in</div>
+      </div>
+      <div class="actions" style="margin-top:18px">
+        <button class="btn" id="themeBtn">Toggle Dark Mode</button>
+        <button class="btn" id="exportBtn">Export Leads</button>
+        <button class="btn danger" id="logoutBtn">Logout</button>
+      </div>
+    </div>
+  </section>
+</main>
+</div>
+
+<div class="modal-overlay" id="leadModal">
+  <div class="modal">
+    <div class="modal-header"><h2 id="leadModalTitle">Add Lead</h2><button class="close" type="button" onclick="closeLeadModal()">×</button></div>
+    <form class="form" id="leadForm">
+      <input type="hidden" id="leadId">
+      <div class="form-grid">
+        <div class="field"><label>Name *</label><input id="leadName" required></div>
+        <div class="field"><label>Company</label><input id="leadCompany"></div>
+        <div class="field"><label>Email</label><input id="leadEmail" type="email"></div>
+        <div class="field"><label>Phone</label><input id="leadPhone"></div>
+        <div class="field"><label>Status</label><select id="leadStatus"><option>New</option><option>Contacted</option><option>Qualified</option><option>Converted</option><option>Lost</option></select></div>
+        <div class="field"><label>Source</label><input id="leadSource" placeholder="LinkedIn, Website, Referral"></div>
+        <div class="field"><label>Company Size</label><input id="leadSize"></div>
+        <div class="field"><label>Location</label><input id="leadLocation"></div>
+        <div class="field full"><label>Notes</label><textarea id="leadNotes" rows="4"></textarea></div>
+      </div>
+      <div class="actions" style="justify-content:flex-end;margin-top:18px">
+        <button class="btn" type="button" onclick="closeLeadModal()">Cancel</button>
+        <button class="btn primary" type="submit">Save Lead</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="toast" style="display:none;position:fixed;right:18px;bottom:18px;z-index:200;background:#111827;color:#fff;padding:12px 16px;border-radius:10px;font-weight:700"></div>
+
+<script>
+"use strict";
+
+/* =========================
+   CONFIG
+========================= */
+const API_BASE =
+  localStorage.getItem("leadflow_api_base") ||
+  "https://YOUR-BACKEND-DOMAIN.com";
+
+const PREMIUM_PRICE = 499;
+
+/* =========================
+   STATE
+========================= */
+let leads = [];
+let prospects = [];
+let editingLeadId = null;
+
+/* =========================
+   HELPERS
+========================= */
+function esc(value){
+  return String(value ?? "").replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c];
+  });
+}
+
+function toast(message){
+  const el=document.getElementById("toast");
+  el.textContent=message;
+  el.style.display="block";
+  clearTimeout(window.__leadflowToast);
+  window.__leadflowToast=setTimeout(()=>el.style.display="none",2600);
+}
+
+function currentEmail(){
+  return (
+    localStorage.getItem("leadflow_email") ||
+    localStorage.getItem("user_email") ||
+    ""
+  ).trim().toLowerCase();
+}
+
+function statusBadge(status){
+  const s=String(status||"New");
+  return '<span class="badge '+s.toLowerCase()+'">'+esc(s)+"</span>";
+}
+
+async function apiRequest(path,options={}){
+  const headers={
+    "Content-Type":"application/json",
+    ...(options.headers||{})
+  };
+
+  const response=await fetch(API_BASE+path,{
+    ...options,
+    headers,
+    credentials:"include"
+  });
+
+  const text=await response.text();
+  let data={};
+
+  try{
+    data=text?JSON.parse(text):{};
+  }catch(_){
+    data={message:text};
+  }
+
+  if(!response.ok){
+    throw new Error(
+      data.message ||
+      data.error ||
+      "Request failed ("+response.status+")"
+    );
+  }
+
+  return data;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+function showPage(page){
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  const target=document.getElementById(page);
+
+  if(target) target.classList.add("active");
+
+  document.querySelectorAll(".nav button").forEach(x=>{
+    x.classList.toggle("active",x.dataset.page===page);
+  });
+
+  document.getElementById("pageTitle").textContent=
+    ({
+      dashboard:"Dashboard",
+      clients:"Find Clients",
+      prospects:"Prospects",
+      crm:"CRM",
+      premium:"Premium",
+      settings:"Settings"
+    })[page] || page;
+
+  document.getElementById("sidebar").classList.remove("open");
+
+  if(page==="prospects") loadProspects();
+  if(page==="dashboard") refreshDashboard();
+  if(page==="crm") loadLeads();
+}
+
+/* =========================
+   AUTH / ACCOUNT
+========================= */
+function updateAccountUI(){
+  const email=currentEmail();
+  document.getElementById("accountEmail").textContent=
+    email || "Not signed in";
+}
+
+async function checkAccount(){
+  try{
+    const data=await apiRequest("/api/me");
+    const user=data.user||data.account||data;
+    const email=user.email||currentEmail();
+
+    if(email){
+      localStorage.setItem("leadflow_email",String(email).toLowerCase());
+    }
+
+    updateAccountUI();
+    return data;
+  }catch(error){
+    updateAccountUI();
+    return null;
+  }
+}
+
+async function logout(){
+  try{
+    await apiRequest("/api/auth/logout",{method:"POST"});
+  }catch(_){}
+
+  localStorage.removeItem("leadflow_email");
+  localStorage.removeItem("user_email");
+  localStorage.removeItem("leadflow_membership");
+  toast("Logged out.");
+  setTimeout(()=>location.reload(),500);
+}
+
+/* =========================
+   MEMBERSHIP / USAGE
+========================= */
+async function refreshMembership(){
+  const box=document.getElementById("membershipStatus");
+
+  try{
+    const data=await apiRequest("/api/membership");
+    const m=data.membership||data;
+
+    localStorage.setItem("leadflow_membership",JSON.stringify(m));
+
+    if(m.owner){
+      box.className="success";
+      box.textContent="👑 Owner account — unlimited access.";
+    }else if(m.premium){
+      box.className="success";
+      box.textContent="⭐ Premium account active.";
+    }else if(m.trial){
+      box.className="notice";
+      box.textContent="🎁 Trial access is active.";
+    }else{
+      box.className="notice";
+      box.textContent="🔒 Free account.";
+    }
+  }catch(_){
+    const saved=localStorage.getItem("leadflow_membership");
+
+    if(saved){
+      try{
+        const m=JSON.parse(saved);
+        box.className=m.premium||m.owner?"success":"notice";
+        box.textContent=m.owner?
+          "👑 Owner account — unlimited access.":
+          m.premium?
+          "⭐ Premium account active.":
+          "🎁 Free/trial account.";
+      }catch(_){}
+    }else{
+      box.className="notice";
+      box.textContent="Account status unavailable.";
+    }
+  }
+}
+
+async function refreshUsage(){
+  const box=document.getElementById("usageBox");
+
+  try{
+    const data=await apiRequest("/api/usage");
+    const u=data.usage||data;
+
+    const used=Number(u.used??u.requestsUsed??0);
+    const limit=u.limit??u.requestsLimit??"—";
+
+    box.innerHTML=
+      "<strong>"+esc(used)+"</strong> requests used"+
+      " · <strong>"+esc(limit)+"</strong> limit";
+  }catch(error){
+    box.textContent="Usage unavailable: "+error.message;
+  }
+}
+
+/* =========================
+   LEADS API
+========================= */
+async function loadLeads(){
+  try{
+    const data=await apiRequest("/api/leads");
+    leads=Array.isArray(data)?
+      data:
+      (data.leads||data.items||[]);
+
+    renderAll();
+  }catch(error){
+    leads=[];
+    renderAll();
+
+    if(!String(error.message).includes("404")){
+      toast("Could not load leads: "+error.message);
+    }
+  }
+}
+
+async function saveLeadToAPI(payload,id){
+  if(id){
+    return apiRequest("/api/leads/"+encodeURIComponent(id),{
+      method:"PUT",
+      body:JSON.stringify(payload)
+    });
+  }
+
+  return apiRequest("/api/leads",{
+    method:"POST",
+    body:JSON.stringify(payload)
+  });
+}
+
+async function removeLeadFromAPI(id){
+  return apiRequest("/api/leads/"+encodeURIComponent(id),{
+    method:"DELETE"
+  });
+}
+
+/* =========================
+   LEAD MODAL
+========================= */
+function addLead(){
+  editingLeadId=null;
+  document.getElementById("leadForm").reset();
+  document.getElementById("leadId").value="";
+  document.getElementById("leadModalTitle").textContent="Add Lead";
+  document.getElementById("leadModal").classList.add("show");
+  setTimeout(()=>document.getElementById("leadName").focus(),50);
+}
+
+function editLead(id){
+  const lead=leads.find(x=>String(x.id)===String(id));
+
+  if(!lead){
+    toast("Lead not found.");
+    return;
+  }
+
+  editingLeadId=lead.id;
+
+  document.getElementById("leadId").value=lead.id||"";
+  document.getElementById("leadName").value=lead.name||"";
+  document.getElementById("leadCompany").value=lead.company||lead.company_name||"";
+  document.getElementById("leadEmail").value=lead.email||"";
+  document.getElementById("leadPhone").value=lead.phone||"";
+  document.getElementById("leadStatus").value=lead.status||"New";
+  document.getElementById("leadSource").value=lead.source||"";
+  document.getElementById("leadSize").value=lead.company_size||lead.size||"";
+  document.getElementById("leadLocation").value=lead.location||"";
+  document.getElementById("leadNotes").value=lead.notes||"";
+
+  document.getElementById("leadModalTitle").textContent="Edit Lead";
+  document.getElementById("leadModal").classList.add("show");
+}
+
+async function deleteLead(id){
+  const lead=leads.find(x=>String(x.id)===String(id));
+
+  if(!lead) return;
+
+  if(!confirm("Delete this lead?")) return;
+
+  try{
+    await removeLeadFromAPI(id);
+
+    leads=leads.filter(x=>String(x.id)!==String(id));
+    renderAll();
+    toast("Lead deleted.");
+  }catch(error){
+    toast("Delete failed: "+error.message);
+  }
+}
+
+function closeLeadModal(){
+  document.getElementById("leadModal").classList.remove("show");
+}
+
+/* =========================
+   LEAD FORM
+========================= */
+document.getElementById("leadForm").addEventListener("submit",async function(event){
+  event.preventDefault();
+
+  const payload={
+    name:document.getElementById("leadName").value.trim(),
+    company:document.getElementById("leadCompany").value.trim(),
+    email:document.getElementById("leadEmail").value.trim(),
+    phone:document.getElementById("leadPhone").value.trim(),
+    status:document.getElementById("leadStatus").value,
+    source:document.getElementById("leadSource").value.trim(),
+    company_size:document.getElementById("leadSize").value.trim(),
+    location:document.getElementById("leadLocation").value.trim(),
+    notes:document.getElementById("leadNotes").value.trim()
+  };
+
+  if(!payload.name){
+    toast("Lead name is required.");
+    return;
+  }
+
+  const button=event.submitter;
+  button.disabled=true;
+
+  try{
+    const data=await saveLeadToAPI(payload,editingLeadId);
+    const saved=data.lead||data;
+
+    if(editingLeadId){
+      const index=leads.findIndex(x=>String(x.id)===String(editingLeadId));
+      if(index>=0) leads[index]={...leads[index],...saved,...payload};
+      toast("Lead updated.");
+    }else{
+      leads.unshift({...payload,...saved});
+      toast("Lead created.");
+    }
+
+    closeLeadModal();
+    renderAll();
+  }catch(error){
+    toast("Save failed: "+error.message);
+  }finally{
+    button.disabled=false;
+  }
+});
+
+/* =========================
+   RENDER LEADS
+========================= */
+function renderLeads(list=leads){
+  const body=document.getElementById("leadsTable");
+
+  if(!list.length){
+    body.innerHTML='<tr><td colspan="6" class="empty">No leads found.</td></tr>';
+    return;
+  }
+
+  body.innerHTML=list.map(lead=>{
+    const id=JSON.stringify(String(lead.id));
+
+    return "<tr>"+
+      "<td><strong>"+esc(lead.name||"Unnamed")+"</strong></td>"+
+      "<td>"+esc(lead.company||lead.company_name||"—")+"</td>"+
+      "<td>"+esc(lead.email||"—")+"</td>"+
+      "<td>"+statusBadge(lead.status)+"</td>"+
+      "<td>"+esc(lead.source||"—")+"</td>"+
+      "<td><div class=\"actions\">"+
+      "<button class=\"icon\" onclick='editLead("+id+")'>✏️</button>"+
+      "<button class=\"icon\" onclick='deleteLead("+id+")'>🗑️</button>"+
+      "</div></td>"+
+      "</tr>";
+  }).join("");
+}
+
+function filterLeads(){
+  const q=document.getElementById("leadSearch").value.toLowerCase().trim();
+  const status=document.getElementById("leadFilter").value;
+
+  const filtered=leads.filter(lead=>{
+    const matchesStatus=!status||lead.status===status;
+    const text=[
+      lead.name,lead.company,lead.email,lead.phone,
+      lead.source,lead.location
+    ].join(" ").toLowerCase();
+
+    return matchesStatus&&text.includes(q);
+  });
+
+  renderLeads(filtered);
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+function refreshDashboard(){
+  const total=leads.length;
+  const count=status=>leads.filter(x=>String(x.status||"New")===status).length;
+
+  document.getElementById("statTotal").textContent=total;
+  document.getElementById("statNew").textContent=count("New");
+  document.getElementById("statQualified").textContent=count("Qualified");
+  document.getElementById("statConverted").textContent=count("Converted");
+
+  const recent=document.getElementById("recentLeads");
+
+  recent.innerHTML=leads.slice(0,7).map(x=>
+    '<div style="padding:12px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:10px">'+
+    '<div><strong>'+esc(x.name||"Unnamed")+'</strong>'+
+    '<div class="muted">'+esc(x.company||"No company")+"</div></div>"+
+    statusBadge(x.status)+
+    "</div>"
+  ).join("") || '<div class="empty">No leads yet.</div>';
+}
+
+/* =========================
+   CLIENT SEARCH
+========================= */
+document.getElementById("clientSearchForm").addEventListener("submit",async function(event){
+  event.preventDefault();
+
+  const button=document.getElementById("searchClientsBtn");
+  const results=document.getElementById("clientResults");
+  const message=document.getElementById("clientMessage");
+
+  const params=new URLSearchParams();
+
+  const keyword=document.getElementById("clientKeyword").value.trim();
+  const location=document.getElementById("clientLocation").value.trim();
+  const size=document.getElementById("clientSize").value;
+  const title=document.getElementById("clientTitle").value.trim();
+
+  if(keyword)params.set("keyword",keyword);
+  if(location)params.set("location",location);
+  if(size)params.set("companySize",size);
+  if(title)params.set("title",title);
+
+  button.disabled=true;
+  message.innerHTML='<div class="notice">Searching clients...</div>';
+
+  try{
+    let data;
+
+    try{
+      data=await apiRequest("/api/clients/search?"+params.toString());
+    }catch(_){
+      data=await apiRequest("/api/prospects/search?"+params.toString());
+    }
+
+    prospects=data.prospects||data.clients||data.results||data.items||(Array.isArray(data)?data:[]);
+
+    renderClientResults(prospects);
+    message.innerHTML='<div class="success">'+prospects.length+" result(s) found.</div>";
+  }catch(error){
+    results.innerHTML="";
+    message.innerHTML='<div class="error">'+esc(error.message)+"</div>";
+  }finally{
+    button.disabled=false;
+  }
+});
+
+function renderClientResults(items){
+  const box=document.getElementById("clientResults");
+
+  if(!items.length){
+    box.innerHTML='<div class="empty">No clients found.</div>';
+    return;
+  }
+
+  box.innerHTML=items.map(item=>{
+    const name=item.name||item.company||item.companyName||"Unnamed";
+    const company=item.company||item.companyName||name;
+
+    return '<div class="prospect">'+
+      "<h3>"+esc(name)+"</h3>"+
+      '<div class="muted">'+esc(item.industry||item.category||"Business prospect")+"</div>"+
+      '<div class="row"><span>Location</span><strong>'+esc(item.location||"—")+"</strong></div>"+
+      '<div class="row"><span>Size</span><strong>'+esc(item.companySize||item.size||"—")+"</strong></div>"+
+      '<div class="row"><span>Decision Maker</span><strong>'+esc(item.title||item.role||"—")+"</strong></div>"+
+      '<div class="actions" style="margin-top:12px">'+
+      '<button class="btn primary" onclick="saveProspect('+JSON.stringify(item).replace(/</g,"\\u003c")+')">Save Prospect</button>'+
+      "</div></div>";
+  }).join("");
+}
+
+/* =========================
+   PROSPECTS
+========================= */
+async function saveProspect(item){
+  try{
+    const data=await apiRequest("/api/prospects",{
+      method:"POST",
+      body:JSON.stringify(item)
+    });
+
+    const saved=data.prospect||data;
+    prospects.unshift(saved);
+    toast("Prospect saved.");
+    renderProspects();
+  }catch(error){
+    toast("Could not save prospect: "+error.message);
+  }
+}
+
+async function loadProspects(){
+  try{
+    const data=await apiRequest("/api/prospects");
+    prospects=data.prospects||data.items||(Array.isArray(data)?data:[]);
+  }catch(_){
+    prospects=[];
+  }
+
+  renderProspects();
+}
+
+function renderProspects(){
+  const box=document.getElementById("prospectResults");
+  const q=document.getElementById("prospectSearch").value.toLowerCase().trim();
+
+  const list=prospects.filter(x=>
+    JSON.stringify(x).toLowerCase().includes(q)
+  );
+
+  if(!list.length){
+    box.innerHTML='<div class="empty">No saved prospects.</div>';
+    return;
+  }
+
+  box.innerHTML=list.map(item=>
+    '<div class="prospect">'+
+    "<h3>"+esc(item.name||item.company||"Unnamed")+"</h3>"+
+    '<div class="muted">'+esc(item.industry||item.category||"")+"</div>"+
+    '<div class="row"><span>Location</span><strong>'+esc(item.location||"—")+"</strong></div>"+
+    '<div class="row"><span>Company</span><strong>'+esc(item.company||"—")+"</strong></div>"+
+    '<div class="row"><span>Contact</span><strong>'+esc(item.email||item.contact||"—")+"</strong></div>"+
+    '<div class="actions" style="margin-top:12px"><button class="btn" onclick="prospectToLead('+JSON.stringify(item).replace(/</g,"\\u003c")+')">Add to CRM</button></div>'+
+    "</div>"
+  ).join("");
+}
+
+async function prospectToLead(item){
+  try{
+    const payload={
+      name:item.contactName||item.name||item.company||"Prospect",
+      company:item.company||item.companyName||"",
+      email:item.email||"",
+      phone:item.phone||"",
+      location:item.location||"",
+      company_size:item.companySize||item.size||"",
+      source:"LeadFlow Prospect Search",
+      status:"New",
+      notes:item.notes||""
+    };
+
+    await saveLeadToAPI(payload,null);
+    await loadLeads();
+    toast("Prospect added to CRM.");
+    showPage("crm");
+  }catch(error){
+    toast("Could not add prospect: "+error.message);
+  }
+}
+
+/* =========================
+   PAYMENT
+========================= */
+async function createPayment(){
+  const button=document.getElementById("createPaymentBtn");
+  const message=document.getElementById("paymentMessage");
+
+  button.disabled=true;
+
+  try{
+    const data=await apiRequest("/api/payment/create",{
+      method:"POST",
+      body:JSON.stringify({amount:PREMIUM_PRICE})
+    });
+
+    document.getElementById("paymentIdInput").value=
+      data.paymentId||data.id||"";
+
+    if(data.paymentLink){
+      message.innerHTML=
+        '<div class="success">Payment request created. <a href="'+
+        esc(data.paymentLink)+
+        '" target="_blank" rel="noopener">Open payment</a></div>';
+    }else{
+      message.innerHTML='<div class="success">Payment request created.</div>';
+    }
+  }catch(error){
+    message.innerHTML='<div class="error">'+esc(error.message)+"</div>";
+  }finally{
+    button.disabled=false;
+  }
+}
+
+async function submitPaymentReference(){
+  const button=document.getElementById("submitReferenceBtn");
+  const message=document.getElementById("paymentMessage");
+
+  const paymentId=document.getElementById("paymentIdInput").value.trim();
+  const reference=document.getElementById("referenceInput").value.trim();
+
+  if(reference.length<6){
+    message.innerHTML='<div class="error">Enter a valid transaction reference.</div>';
+    return;
+  }
+
+  button.disabled=true;
+
+  try{
+    const data=await apiRequest("/api/payment/verify",{
+      method:"POST",
+      body:JSON.stringify({
+        paymentId,
+        reference
+      })
+    });
+
+    message.innerHTML='<div class="success">'+
+      esc(data.message||"Payment submitted for verification.")+
+      "</div>";
+
+    await refreshMembership();
+  }catch(error){
+    message.innerHTML='<div class="error">'+esc(error.message)+"</div>";
+  }finally{
+    button.disabled=false;
+  }
+}
+
+/* =========================
+   EXPORT
+========================= */
+function exportLeads(){
+  const blob=new Blob(
+    [JSON.stringify(leads,null,2)],
+    {type:"application/json"}
+  );
+
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+
+  a.href=url;
+  a.download="leadflow-leads.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  URL.revokeObjectURL(url);
+  toast("Leads exported.");
+}
+
+/* =========================
+   HEALTH
+========================= */
+async function backendHealth(){
+  try{
+    const data=await apiRequest("/api/health");
+    toast("🟢 LeadFlow API is online.");
+    return data;
+  }catch(error){
+    toast("🔴 API unavailable.");
+    return null;
+  }
+}
+
+/* =========================
+   THEME
+========================= */
+function loadTheme(){
+  if(localStorage.getItem("leadflow_theme")==="dark"){
+    document.body.classList.add("dark");
+  }
+}
+
+function toggleTheme(){
+  document.body.classList.toggle("dark");
+
+  localStorage.setItem(
+    "leadflow_theme",
+    document.body.classList.contains("dark")?"dark":"light"
+  );
+}
+
+/* =========================
+   GLOBAL RENDER
+========================= */
+function renderAll(){
+  renderLeads();
+  refreshDashboard();
+  renderProspects();
+}
+
+/* =========================
+   EVENTS
+========================= */
+document.querySelectorAll(".nav button").forEach(button=>{
+  button.addEventListener("click",()=>{
+    showPage(button.dataset.page);
+  });
+});
+
+document.getElementById("menuBtn").addEventListener("click",()=>{
+  document.getElementById("sidebar").classList.toggle("open");
+});
+
+document.getElementById("addLeadBtn").addEventListener("click",addLead);
+document.getElementById("healthBtn").addEventListener("click",backendHealth);
+document.getElementById("themeBtn").addEventListener("click",toggleTheme);
+document.getElementById("exportBtn").addEventListener("click",exportLeads);
+document.getElementById("logoutBtn").addEventListener("click",logout);
+document.getElementById("createPaymentBtn").addEventListener("click",createPayment);
+document.getElementById("submitReferenceBtn").addEventListener("click",submitPaymentReference);
+
+document.getElementById("leadModal").addEventListener("click",event=>{
+  if(event.target.id==="leadModal")closeLeadModal();
+});
+
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape")closeLeadModal();
+});
+
+/* =========================
+   STARTUP
+========================= */
+async function initLeadFlow(){
+  loadTheme();
+  updateAccountUI();
+  await checkAccount();
+  await loadLeads();
+  await Promise.allSettled([
+    refreshMembership(),
+    refreshUsage()
+  ]);
+  renderAll();
+}
+
+initLeadFlow();
+
+/* Public functions used by inline UI */
+window.addLead=addLead;
+window.editLead=editLead;
+window.deleteLead=deleteLead;
+window.closeLeadModal=closeLeadModal;
+window.filterLeads=filterLeads;
+window.loadProspects=loadProspects;
+window.renderProspects=renderProspects;
+window.saveProspect=saveProspect;
+window.prospectToLead=prospectToLead;
+window.showPage=showPage;
+</script>
+</body>
+</html>
