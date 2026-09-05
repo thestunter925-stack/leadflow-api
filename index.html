@@ -1,3792 +1,2566 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#070b14">
-<meta name="description" content="LeadFlow AI — global prospect intelligence for digital marketing and growth professionals.">
-<title>LeadFlow AI — Client Intelligence</title>
-
-<style>
-:root{
-  --bg:#070b14;
-  --panel:#0d1422;
-  --panel2:#111b2c;
-  --line:#21304a;
-  --text:#f5f7fb;
-  --muted:#91a0b8;
-  --primary:#765cff;
-  --primary2:#9b8cff;
-  --green:#25d39f;
-  --red:#ff647c;
-  --yellow:#ffc857;
-}
-
-*{box-sizing:border-box;margin:0;padding:0}
-
-html{scroll-behavior:smooth}
-
-body{
-  min-height:100vh;
-  background:
-    radial-gradient(circle at 15% 0%,rgba(118,92,255,.18),transparent 28%),
-    radial-gradient(circle at 90% 10%,rgba(37,211,159,.08),transparent 25%),
-    var(--bg);
-  color:var(--text);
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-
-button,input,select,textarea{font:inherit}
-
-button{cursor:pointer}
-
-button:disabled{
-  opacity:.55;
-  cursor:not-allowed;
-}
-
-.app{
-  min-height:100vh;
-  display:flex;
-}
-
-/* SIDEBAR */
-
-.sidebar{
-  position:fixed;
-  left:0;
-  top:0;
-  bottom:0;
-  width:250px;
-  padding:22px 15px;
-  background:rgba(7,11,20,.96);
-  border-right:1px solid var(--line);
-  z-index:20;
-}
-
-.brand{
-  padding:5px 12px 26px;
-}
-
-.brand h1{
-  font-size:23px;
-  letter-spacing:-.8px;
-}
-
-.brand h1 span{
-  color:var(--primary2);
-}
-
-.brand p{
-  color:var(--muted);
-  font-size:11px;
-  margin-top:4px;
-}
-
-.nav{
-  display:grid;
-  gap:6px;
-}
-
-.nav button{
-  width:100%;
-  border:0;
-  border-radius:10px;
-  background:transparent;
-  color:var(--muted);
-  text-align:left;
-  padding:13px 14px;
-  transition:.2s;
-}
-
-.nav button:hover,
-.nav button.active{
-  color:white;
-  background:rgba(118,92,255,.14);
-}
-
-.sidebar-owner{
-  position:absolute;
-  left:15px;
-  right:15px;
-  bottom:18px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:12px;
-  background:linear-gradient(145deg,#111a2d,#090f1c);
-}
-
-.sidebar-owner b{
-  color:var(--green);
-  font-size:11px;
-}
-
-.sidebar-owner p{
-  margin-top:5px;
-  color:var(--muted);
-  font-size:10px;
-  word-break:break-all;
-}
-
-/* MAIN */
-
-.main{
-  width:calc(100% - 250px);
-  margin-left:250px;
-}
-
-.topbar{
-  height:68px;
-  position:sticky;
-  top:0;
-  z-index:15;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 28px;
-  background:rgba(7,11,20,.84);
-  backdrop-filter:blur(15px);
-  border-bottom:1px solid var(--line);
-}
-
-.system{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  color:var(--muted);
-  font-size:12px;
-}
-
-.system-dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--green);
-  box-shadow:0 0 12px var(--green);
-}
-
-.account{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.account-label{
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:20px;
-  padding:8px 12px;
-  font-size:12px;
-}
-
-/* CONTENT */
-
-.content{
-  max-width:1500px;
-  margin:auto;
-  padding:28px;
-}
-
-.page{
-  display:none;
-}
-
-.page.active{
-  display:block;
-}
-
-/* HERO */
-
-.hero{
-  display:grid;
-  grid-template-columns:1.45fr 1fr;
-  gap:18px;
-  margin-bottom:18px;
-}
-
-.hero-main,
-.intelligence{
-  border:1px solid var(--line);
-  border-radius:20px;
-  background:var(--panel);
-}
-
-.hero-main{
-  padding:31px;
-  background:
-    linear-gradient(135deg,rgba(118,92,255,.14),rgba(13,20,34,.97));
-}
-
-.hero-main h2{
-  max-width:700px;
-  font-size:clamp(32px,4vw,53px);
-  line-height:1;
-  letter-spacing:-2.5px;
-}
-
-.hero-main h2 span{
-  color:var(--primary2);
-}
-
-.hero-main p{
-  max-width:680px;
-  margin-top:16px;
-  color:var(--muted);
-  line-height:1.7;
-}
-
-.actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:23px;
-}
-
-.btn{
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:11px 15px;
-  background:var(--panel2);
-  color:white;
-}
-
-.btn:hover{
-  transform:translateY(-1px);
-}
-
-.btn.primary{
-  border:0;
-  background:linear-gradient(135deg,var(--primary),var(--primary2));
-}
-
-.btn.green{
-  border:0;
-  background:linear-gradient(135deg,#16b888,var(--green));
-  color:#04130e;
-  font-weight:700;
-}
-
-.intelligence{
-  padding:24px;
-}
-
-.intelligence-label{
-  color:var(--green);
-  font-size:10px;
-  font-weight:800;
-  letter-spacing:1.3px;
-}
-
-.intelligence h3{
-  margin-top:10px;
-  font-size:20px;
-}
-
-.intelligence p{
-  margin-top:10px;
-  color:var(--muted);
-  line-height:1.65;
-  font-size:13px;
-}
-
-.pills{
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-  margin-top:17px;
-}
-
-.pill{
-  color:#d8def0;
-  border:1px solid var(--line);
-  background:#0a1120;
-  border-radius:20px;
-  padding:6px 9px;
-  font-size:10px;
-}
-
-/* STATS */
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:13px;
-  margin-bottom:18px;
-}
-
-.stat{
-  padding:18px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:var(--panel);
-}
-
-.stat small{
-  color:var(--muted);
-  font-size:11px;
-}
-
-.stat strong{
-  display:block;
-  font-size:27px;
-  margin-top:7px;
-}
-
-/* PANEL */
-
-.panel{
-  padding:21px;
-  border:1px solid var(--line);
-  border-radius:17px;
-  background:var(--panel);
-  margin-bottom:17px;
-}
-
-.panel-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:18px;
-}
-
-.panel-head h3{
-  font-size:18px;
-}
-
-.muted{
-  color:var(--muted);
-}
-
-.small{
-  font-size:12px;
-}
-
-/* FIND */
-
-.filters{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-}
-
-.field label{
-  display:block;
-  color:var(--muted);
-  font-size:11px;
-  margin-bottom:6px;
-}
-
-.field input,
-.field select,
-.field textarea{
-  width:100%;
-  color:white;
-  background:#080e1a;
-  border:1px solid var(--line);
-  border-radius:9px;
-  padding:12px;
-  outline:none;
-}
-
-.field textarea{
-  min-height:110px;
-  resize:vertical;
-}
-
-.field input:focus,
-.field select:focus,
-.field textarea:focus{
-  border-color:var(--primary);
-}
-
-.info{
-  padding:12px;
-  margin-top:15px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:#090f1c;
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.6;
-}
-
-/* LEADS */
-
-.leads{
-  display:grid;
-  gap:12px;
-}
-
-.lead{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:15px;
-  padding:17px;
-  border:1px solid var(--line);
-  border-radius:13px;
-  background:#09111f;
-}
-
-.lead-title{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  flex-wrap:wrap;
-}
-
-.lead-title h4{
-  font-size:16px;
-}
-
-.badge{
-  padding:5px 8px;
-  border-radius:20px;
-  font-size:9px;
-  background:rgba(37,211,159,.1);
-  color:var(--green);
-}
-
-.lead-meta{
-  margin-top:7px;
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.65;
-}
-
-.lead-actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-  margin-top:12px;
-}
-
-.lead-actions .btn{
-  padding:8px 10px;
-  font-size:11px;
-}
-
-.score{
-  min-width:75px;
-  text-align:center;
-}
-
-.score strong{
-  display:block;
-  color:var(--green);
-  font-size:25px;
-}
-
-.score small{
-  color:var(--muted);
-  font-size:9px;
-}
-
-/* CRM */
-
-.pipeline{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:10px;
-}
-
-.stage{
-  min-height:180px;
-  padding:11px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:#090f1c;
-}
-
-.stage h4{
-  font-size:10px;
-  color:var(--muted);
-  margin-bottom:11px;
-}
-
-.stage-card{
-  padding:9px;
-  margin-bottom:7px;
-  border:1px solid var(--line);
-  border-radius:8px;
-  background:var(--panel2);
-  font-size:11px;
-}
-
-/* PREMIUM */
-
-.premium{
-  max-width:720px;
-  margin:auto;
-  padding:31px;
-  text-align:center;
-  border:1px solid #5147ae;
-  border-radius:21px;
-  background:
-    linear-gradient(145deg,rgba(118,92,255,.18),rgba(13,20,34,.98));
-}
-
-.premium h2{
-  margin-top:13px;
-}
-
-.price{
-  margin:10px 0;
-  font-size:52px;
-  font-weight:800;
-}
-
-.features{
-  display:grid;
-  gap:8px;
-  text-align:left;
-  margin:21px 0;
-}
-
-.feature{
-  padding:10px;
-  border-radius:8px;
-  background:rgba(255,255,255,.025);
-  color:#dce2f2;
-  font-size:12px;
-}
-
-.payment-id{
-  margin-top:17px;
-  padding:13px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:#080e1a;
-}
-
-.payment-id code{
-  color:var(--green);
-  word-break:break-all;
-}
-
-.warning{
-  color:var(--yellow);
-  font-size:11px;
-  line-height:1.6;
-  margin-top:12px;
-}
-
-/* EMPTY */
-
-.empty{
-  padding:28px;
-  text-align:center;
-  color:var(--muted);
-  border:1px dashed var(--line);
-  border-radius:12px;
-}
-
-/* MODAL */
-
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:100;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:rgba(0,0,0,.75);
-}
-
-.modal.show{
-  display:flex;
-}
-
-.modal-box{
-  width:100%;
-  max-width:520px;
-  padding:23px;
-  border:1px solid var(--line);
-  border-radius:17px;
-  background:#0d1422;
-}
-
-.modal-box h3{
-  margin-bottom:10px;
-}
-
-.modal-box p{
-  color:var(--muted);
-  line-height:1.65;
-  font-size:13px;
-  white-space:pre-wrap;
-}
-
-.modal-close{
-  float:right;
-  border:0;
-  background:none;
-  color:var(--muted);
-  font-size:22px;
-}
-
-/* TOAST */
-
-.toast{
-  position:fixed;
-  right:18px;
-  bottom:18px;
-  z-index:200;
-  display:none;
-  max-width:320px;
-  padding:12px 15px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:#111b2c;
-  color:white;
-  font-size:12px;
-}
-
-.toast.show{
-  display:block;
-}
-
-/* MOBILE */
-
-.mobile-nav{
-  display:none;
-}
-
-@media(max-width:1000px){
-
-  .sidebar{
-    display:none;
-  }
-
-  .main{
-    width:100%;
-    margin-left:0;
-    padding-bottom:70px;
-  }
-
-  .hero{
-    grid-template-columns:1fr;
-  }
-
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .filters{
-    grid-template-columns:1fr;
-  }
-
-  .pipeline{
-    grid-template-columns:1fr;
-  }
-
-  .stage{
-    min-height:auto;
-  }
-
-  .mobile-nav{
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
-    height:65px;
-    z-index:50;
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    border-top:1px solid var(--line);
-    background:#090f1c;
-  }
-
-  .mobile-nav button{
-    border:0;
-    background:none;
-    color:var(--muted);
-    font-size:10px;
-  }
-
-  .mobile-nav button.active{
-    color:white;
-  }
-
-}
-
-@media(max-width:600px){
-
-  .topbar{
-    padding:0 14px;
-  }
-
-  .content{
-    padding:15px;
-  }
-
-  .hero-main{
-    padding:22px;
-  }
-
-  .hero-main h2{
-    font-size:35px;
-  }
-
-  .stats{
-    gap:8px;
-  }
-
-  .stat{
-    padding:14px;
-  }
-
-  .stat strong{
-    font-size:23px;
-  }
-
-  .lead{
-    grid-template-columns:1fr;
-  }
-
-  .score{
-    text-align:left;
-  }
-
-  .premium{
-    padding:22px;
-  }
-
-}
-
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="description" content="LeadFlow AI - Smart Lead Management CRM">
+  <title>LeadFlow AI</title>
+
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    :root{
+      --primary:#2563eb;
+      --primary-dark:#1d4ed8;
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --border:#e5e7eb;
+      --success:#16a34a;
+      --warning:#d97706;
+      --danger:#dc2626;
+      --sidebar:#111827;
+      --radius:16px;
+    }
+
+    body{
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    button,
+    input,
+    select,
+    textarea{
+      font:inherit;
+    }
+
+    button{
+      cursor:pointer;
+    }
+
+    .app{
+      min-height:100vh;
+      display:flex;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar{
+      width:250px;
+      background:var(--sidebar);
+      color:white;
+      position:fixed;
+      left:0;
+      top:0;
+      bottom:0;
+      padding:20px 14px;
+      z-index:100;
+      overflow-y:auto;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px;
+      margin-bottom:24px;
+    }
+
+    .brand-logo{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:var(--primary);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      font-size:18px;
+    }
+
+    .brand-text{
+      font-size:19px;
+      font-weight:800;
+    }
+
+    .brand-text span{
+      color:#60a5fa;
+    }
+
+    .nav-title{
+      color:#9ca3af;
+      font-size:11px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      padding:0 12px;
+      margin:18px 0 8px;
+    }
+
+    .nav-item{
+      width:100%;
+      border:0;
+      background:transparent;
+      color:#d1d5db;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:11px 12px;
+      border-radius:11px;
+      margin-bottom:4px;
+      text-align:left;
+      transition:.2s;
+    }
+
+    .nav-item:hover{
+      background:#1f2937;
+      color:white;
+    }
+
+    .nav-item.active{
+      background:var(--primary);
+      color:white;
+    }
+
+    .nav-icon{
+      width:22px;
+      text-align:center;
+    }
+
+    /* MAIN */
+
+    .main{
+      margin-left:250px;
+      width:calc(100% - 250px);
+      min-height:100vh;
+    }
+
+    .topbar{
+      height:70px;
+      background:var(--card);
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 28px;
+      position:sticky;
+      top:0;
+      z-index:50;
+    }
+
+    .mobile-menu{
+      display:none;
+      border:0;
+      background:transparent;
+      font-size:25px;
+    }
+
+    .top-title{
+      font-size:20px;
+      font-weight:750;
+    }
+
+    .top-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .icon-button{
+      width:40px;
+      height:40px;
+      border:1px solid var(--border);
+      background:white;
+      border-radius:10px;
+    }
+
+    .avatar{
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      background:#dbeafe;
+      color:#1d4ed8;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+    }
+
+    .content{
+      padding:28px;
+      max-width:1500px;
+      margin:auto;
+    }
+
+    /* PAGES */
+
+    .page{
+      display:none;
+    }
+
+    .page.active{
+      display:block;
+    }
+
+    .page-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:15px;
+      margin-bottom:24px;
+    }
+
+    .page-header h1{
+      font-size:28px;
+      margin-bottom:5px;
+    }
+
+    .page-header p{
+      color:var(--muted);
+    }
+
+    /* BUTTONS */
+
+    .btn{
+      border:0;
+      border-radius:10px;
+      padding:11px 16px;
+      font-weight:700;
+      transition:.2s;
+    }
+
+    .btn-primary{
+      background:var(--primary);
+      color:white;
+    }
+
+    .btn-primary:hover{
+      background:var(--primary-dark);
+    }
+
+    .btn-secondary{
+      background:white;
+      border:1px solid var(--border);
+      color:var(--text);
+    }
+
+    .btn-danger{
+      background:#fee2e2;
+      color:var(--danger);
+    }
+
+    /* DASHBOARD */
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:
+        repeat(4,minmax(0,1fr));
+      gap:18px;
+      margin-bottom:24px;
+    }
+
+    .stat-card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:20px;
+    }
+
+    .stat-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:15px;
+    }
+
+    .stat-icon{
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      background:#eff6ff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+    }
+
+    .stat-label{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:600;
+    }
+
+    .stat-value{
+      font-size:30px;
+      font-weight:800;
+    }
+
+    .dashboard-grid{
+      display:grid;
+      grid-template-columns:
+        2fr 1fr;
+      gap:20px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:20px;
+    }
+
+    .card-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:18px;
+    }
+
+    .card-header h2{
+      font-size:18px;
+    }
+
+    /* TABLE */
+
+    .table-wrap{
+      overflow-x:auto;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:600px;
+    }
+
+    th,
+    td{
+      padding:13px 10px;
+      text-align:left;
+      border-bottom:1px solid var(--border);
+      font-size:14px;
+    }
+
+    th{
+      color:var(--muted);
+      font-size:12px;
+      text-transform:uppercase;
+    }
+
+    .badge{
+      display:inline-flex;
+      padding:5px 9px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:700;
+    }
+
+    .badge-new{
+      background:#dbeafe;
+      color:#1d4ed8;
+    }
+
+    .badge-contacted{
+      background:#fef3c7;
+      color:#92400e;
+    }
+
+    .badge-qualified{
+      background:#dcfce7;
+      color:#166534;
+    }
+
+    .badge-converted{
+      background:#d1fae5;
+      color:#065f46;
+    }
+
+    .badge-lost{
+      background:#fee2e2;
+      color:#991b1b;
+    }
+
+    /* LEADS */
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .search{
+      flex:1;
+      min-width:220px;
+      padding:11px 13px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      outline:none;
+      background:white;
+    }
+
+    .search:focus,
+    input:focus,
+    select:focus,
+    textarea:focus{
+      border-color:var(--primary);
+      box-shadow:0 0 0 3px #dbeafe;
+    }
+
+    select,
+    input,
+    textarea{
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:11px 13px;
+      outline:none;
+      background:white;
+      color:var(--text);
+    }
+
+    /* EMPTY */
+
+    .empty{
+      text-align:center;
+      padding:45px 20px;
+      color:var(--muted);
+    }
+
+    /* MODAL */
+
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.5);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:300;
+    }
+
+    .modal-overlay.show{
+      display:flex;
+    }
+
+    .modal{
+      width:100%;
+      max-width:550px;
+      background:white;
+      border-radius:18px;
+      padding:24px;
+      max-height:90vh;
+      overflow-y:auto;
+    }
+
+    .modal-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:20px;
+    }
+
+    .modal-close{
+      border:0;
+      background:#f3f4f6;
+      width:35px;
+      height:35px;
+      border-radius:50%;
+    }
+
+    .form-group{
+      margin-bottom:15px;
+    }
+
+    .form-group label{
+      display:block;
+      margin-bottom:7px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea{
+      width:100%;
+    }
+
+    .modal-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      margin-top:20px;
+    }
+
+    /* TOAST */
+
+    .toast{
+      position:fixed;
+      right:20px;
+      bottom:20px;
+      background:#111827;
+      color:white;
+      padding:13px 17px;
+      border-radius:10px;
+      opacity:0;
+      transform:translateY(15px);
+      pointer-events:none;
+      transition:.25s;
+      z-index:500;
+    }
+
+    .toast.show{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    /* MOBILE */
+
+    @media(max-width:900px){
+
+      .sidebar{
+        transform:translateX(-100%);
+        transition:.25s;
+      }
+
+      .sidebar.open{
+        transform:translateX(0);
+      }
+
+      .main{
+        margin-left:0;
+        width:100%;
+      }
+
+      .mobile-menu{
+        display:block;
+      }
+
+      .topbar{
+        padding:0 15px;
+      }
+
+      .content{
+        padding:18px 14px 90px;
+      }
+
+      .stats-grid{
+        grid-template-columns:
+          repeat(2,minmax(0,1fr));
+      }
+
+      .dashboard-grid{
+        grid-template-columns:1fr;
+      }
+
+      .page-header{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+    }
+
+    @media(max-width:500px){
+
+      .stats-grid{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+      }
+
+      .stat-card{
+        padding:14px;
+      }
+
+      .stat-value{
+        font-size:23px;
+      }
+
+      .stat-icon{
+        width:36px;
+        height:36px;
+      }
+
+      .top-title{
+        font-size:17px;
+      }
+
+      .top-right .icon-button{
+        display:none;
+      }
+
+      .page-header h1{
+        font-size:24px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <div class="app">
 
-<!-- SIDEBAR -->
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
 
-<aside class="sidebar">
-
-  <div class="brand">
-    <h1>LeadFlow <span>AI</span></h1>
-    <p>Global Client Intelligence</p>
-  </div>
-
-  <nav class="nav">
-
-    <button class="active"
-      data-page="dashboard"
-      onclick="navigate('dashboard',this)">
-      ◈ Dashboard
-    </button>
-
-    <button
-      data-page="find"
-      onclick="navigate('find',this)">
-      ⌕ Find Clients
-    </button>
-
-    <button
-      data-page="leads"
-      onclick="navigate('leads',this)">
-      ◎ Prospects
-    </button>
-
-    <button
-      data-page="crm"
-      onclick="navigate('crm',this)">
-      ▦ CRM
-    </button>
-
-    <button
-      data-page="premium"
-      onclick="navigate('premium',this)">
-      ◆ Premium
-    </button>
-
-    <button
-      data-page="settings"
-      onclick="navigate('settings',this)">
-      ⚙ Settings
-    </button>
-
-  </nav>
-
-  <div class="sidebar-owner">
-    <b>OWNER ACCOUNT</b>
-    <p>mdnawaz6052@gmail.com</p>
-  </div>
-
-</aside>
-
-<!-- MAIN -->
-
-<main class="main">
-
-<header class="topbar">
-
-  <div class="system">
-    <span class="system-dot"></span>
-    LeadFlow API interface ready
-  </div>
-
-  <div class="account">
-    <div class="account-label" id="accountLabel">
-      Not signed in
+    <div class="brand">
+      <div class="brand-logo">LF</div>
+      <div class="brand-text">
+        Lead<span>Flow</span> AI
+      </div>
     </div>
-  </div>
 
-</header>
+    <div class="nav-title">Workspace</div>
 
-<div class="content">
+    <button class="nav-item active"
+            data-page="dashboard">
+      <span class="nav-icon">📊</span>
+      Dashboard
+    </button>
 
-<!-- DASHBOARD -->
+    <button class="nav-item"
+            data-page="leads">
+      <span class="nav-icon">👥</span>
+      Leads
+    </button>
 
-<section id="dashboard" class="page active">
+    <button class="nav-item"
+            data-page="companies">
+      <span class="nav-icon">🏢</span>
+      Companies
+    </button>
 
-  <div class="hero">
+    <button class="nav-item"
+            data-page="contacts">
+      <span class="nav-icon">📇</span>
+      Contacts
+    </button>
 
-    <div class="hero-main">
+    <div class="nav-title">Sales</div>
 
-      <h2>
-        Find better
-        <span>business opportunities.</span>
-      </h2>
+    <button class="nav-item"
+            data-page="deals">
+      <span class="nav-icon">💰</span>
+      Deals
+    </button>
 
-      <p>
-        LeadFlow AI is a prospect-intelligence workspace
-        for digital marketers, agencies and growth professionals.
-        Search, qualify, organize and contact potential business
-        prospects from one workspace.
-      </p>
+    <button class="nav-item"
+            data-page="pipeline">
+      <span class="nav-icon">📈</span>
+      Pipeline
+    </button>
 
-      <div class="actions">
+    <button class="nav-item"
+            data-page="tasks">
+      <span class="nav-icon">✅</span>
+      Tasks
+    </button>
 
-        <button class="btn primary"
-          onclick="navigate('find')">
-          Start Client Search
+    <div class="nav-title">Management</div>
+
+    <button class="nav-item"
+            data-page="activities">
+      <span class="nav-icon">📝</span>
+      Activities
+    </button>
+
+    <button class="nav-item"
+            data-page="reports">
+      <span class="nav-icon">📊</span>
+      Reports
+    </button>
+
+    <button class="nav-item"
+            data-page="settings">
+      <span class="nav-icon">⚙️</span>
+      Settings
+    </button>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <header class="topbar">
+
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button
+          class="mobile-menu"
+          id="mobileMenu">
+          ☰
         </button>
 
-        <button class="btn"
-          onclick="navigate('premium')">
-          Premium ₹799
+        <div
+          class="top-title"
+          id="pageTitle">
+          Dashboard
+        </div>
+      </div>
+
+      <div class="top-right">
+
+        <button
+          class="icon-button"
+          onclick="showToast('Notifications coming soon')">
+          🔔
         </button>
 
+        <div class="avatar">N</div>
+
       </div>
+
+    </header>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <section
+        class="page active"
+        id="page-dashboard">
+
+        <div class="page-header">
+          <div>
+            <h1>Dashboard</h1>
+            <p>Manage your sales and leads from one place.</p>
+          </div>
+
+          <button
+            class="btn btn-primary"
+            onclick="openLeadModal()">
+            + Add Lead
+          </button>
+        </div>
+
+        <div class="stats-grid">
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Total Leads</span>
+              <div class="stat-icon">👥</div>
+            </div>
+            <div
+              class="stat-value"
+              id="statTotal">
+              0
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">New Leads</span>
+              <div class="stat-icon">🆕</div>
+            </div>
+            <div
+              class="stat-value"
+              id="statNew">
+              0
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Qualified</span>
+              <div class="stat-icon">⭐</div>
+            </div>
+            <div
+              class="stat-value"
+              id="statQualified">
+              0
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Conversion Rate</span>
+              <div class="stat-icon">📈</div>
+            </div>
+            <div
+              class="stat-value"
+              id="statConversion">
+              0%
+            </div>
+          </div>
+
+        </div>
+
+        <div class="dashboard-grid">
+
+          <div class="card">
+
+            <div class="card-header">
+              <h2>Recent Leads</h2>
+
+              <button
+                class="btn btn-secondary"
+                onclick="navigate('leads')">
+                View All
+              </button>
+            </div>
+
+            <div
+              class="table-wrap"
+              id="dashboardLeads">
+            </div>
+
+          </div>
+
+          <div class="card">
+
+            <div class="card-header">
+              <h2>Lead Breakdown</h2>
+            </div>
+
+            <div id="leadBreakdown"></div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- LEADS -->
+      <section
+        class="page"
+        id="page-leads">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Leads</h1>
+            <p>Manage and track your prospects.</p>
+          </div>
+
+          <button
+            class="btn btn-primary"
+            onclick="openLeadModal()">
+            + Add Lead
+          </button>
+
+        </div>
+
+        <div class="card">
+
+          <div class="toolbar">
+
+            <input
+              id="leadSearch"
+              class="search"
+              placeholder="Search leads..."
+              oninput="renderLeads()">
+
+            <select
+              id="leadStatusFilter"
+              onchange="renderLeads()">
+
+              <option value="">All Statuses</option>
+              <option value="New">New</option>
+              <option value="Contacted">Contacted</option>
+              <option value="Qualified">Qualified</option>
+              <option value="Converted">Converted</option>
+              <option value="Lost">Lost</option>
+
+            </select>
+
+          </div>
+
+          <div
+            class="table-wrap"
+            id="leadsTable">
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- COMPANIES -->
+      <section
+        class="page"
+        id="page-companies">
+
+        <div class="page-header">
+          <div>
+            <h1>Companies</h1>
+            <p>Manage businesses connected to your leads.</p>
+          </div>
+
+          <button
+            class="btn btn-primary"
+            onclick="showToast('Company module coming next')">
+            + Add Company
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="empty">
+            Company management will be connected next.
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- CONTACTS -->
+      <section
+        class="page"
+        id="page-contacts">
+
+        <div class="page-header">
+          <div>
+            <h1>Contacts</h1>
+            <p>Keep your customer contacts organized.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="empty">
+            Contact management will be connected next.
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- DEALS -->
+      <section
+        class="page"
+        id="page-deals">
+
+        <div class="page-header">
+          <div>
+            <h1>Deals</h1>
+            <p>Track revenue opportunities.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="empty">
+            Deal management will be connected next.
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- PIPELINE -->
+      <section
+        class="page"
+        id="page-pipeline">
+
+        <div class="page-header">
+          <div>
+            <h1>Sales Pipeline</h1>
+            <p>Visualize your sales process.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="empty">
+            Pipeline will be connected next.
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- TASKS -->
+      <section
+        class="page"
+        id="page-tasks">
+
+        <div class="page-header">
+          <div>
+            <h1>Tasks</h1>
+            <p>Stay organized and never miss follow-ups.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="empty">
+            Task management will be connected next.
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ACTIVITIES -->
+      <section
+        class="page"
+        id="page-activities">
+
+        <div class="page-header">
+          <div>
+            <h1>Activities</h1>
+            <p>Track calls, meetings and follow-ups.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="empty">
+            Activity tracking will be connected next.
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- REPORTS -->
+      <section
+        class="page"
+        id="page-reports">
+
+        <div class="page-header">
+          <div>
+            <h1>Reports</h1>
+            <p>Understand your sales performance.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="empty">
+            Reports and analytics will be connected next.
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- SETTINGS -->
+      <section
+        class="page"
+        id="page-settings">
+
+        <div class="page-header">
+          <div>
+            <h1>Settings</h1>
+            <p>Configure your LeadFlow AI workspace.</p>
+          </div>
+        </div>
+
+        <div class="card">
+
+          <div class="form-group">
+            <label>Workspace Name</label>
+            <input
+              id="workspaceName"
+              value="LeadFlow AI">
+          </div>
+
+          <button
+            class="btn btn-primary"
+            onclick="saveSettings()">
+            Save Settings
+          </button>
+
+        </div>
+
+      </section>
 
     </div>
 
-    <div class="intelligence">
-
-      <div class="intelligence-label">
-        CLIENT INTELLIGENCE ENGINE
-      </div>
-
-      <h3>From broad search to qualified prospect.</h3>
-
-      <p>
-        Define your ideal customer profile and let the
-        backend lead engine return source-backed prospects
-        with qualification information.
-      </p>
-
-      <div class="pills">
-        <span class="pill">Global markets</span>
-        <span class="pill">Founder targeting</span>
-        <span class="pill">Lead scoring</span>
-        <span class="pill">Source tracking</span>
-        <span class="pill">CRM</span>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="stats">
-
-    <div class="stat">
-      <small>Prospects Found</small>
-      <strong id="statFound">0</strong>
-    </div>
-
-    <div class="stat">
-      <small>Qualified</small>
-      <strong id="statQualified">0</strong>
-    </div>
-
-    <div class="stat">
-      <small>Contacted</small>
-      <strong id="statContacted">0</strong>
-    </div>
-
-    <div class="stat">
-      <small>Won</small>
-      <strong id="statWon">0</strong>
-    </div>
-
-  </div>
-
-  <div class="panel">
-
-    <div class="panel-head">
-
-      <div>
-        <h3>Production architecture</h3>
-        <p class="muted small">
-          The frontend is already structured around a backend API.
-        </p>
-      </div>
-
-    </div>
-
-    <div class="info">
-      Authentication, authorization, trial timing, usage limits,
-      prospect data, payment verification and Premium activation
-      must be controlled by the server. Nothing sensitive is
-      stored as a secret in this HTML file.
-    </div>
-
-  </div>
-
-</section>
-
-<!-- FIND -->
-
-<section id="find" class="page">
-
-  <div class="panel">
-
-    <div class="panel-head">
-
-      <div>
-        <h3>Find Potential Clients</h3>
-        <p class="muted small">
-          Build an ideal customer profile.
-        </p>
-      </div>
-
-      <span class="badge">
-        Backend search
-      </span>
-
-    </div>
-
-    <div class="filters">
-
-      <div class="field">
-
-        <label>Service</label>
-
-        <select id="service">
-          <option>Digital Marketing</option>
-          <option>SEO</option>
-          <option>Social Media Marketing</option>
-          <option>Google Ads</option>
-          <option>Content Marketing</option>
-          <option>Web Development</option>
-          <option>AI Services</option>
-          <option>Graphic Design</option>
-        </select>
-
-      </div>
-
-      <div class="field">
-
-        <label>Country</label>
-
-        <select id="country">
-          <option>Worldwide</option>
-          <option>United States</option>
-          <option>United Kingdom</option>
-          <option>Canada</option>
-          <option>Australia</option>
-          <option>India</option>
-          <option>United Arab Emirates</option>
-          <option>Singapore</option>
-          <option>Germany</option>
-          <option>France</option>
-        </select>
-
-      </div>
-
-      <div class="field">
-
-        <label>Industry</label>
-
-        <select id="industry">
-          <option>SaaS / Technology</option>
-          <option>E-commerce</option>
-          <option>Real Estate</option>
-          <option>Healthcare</option>
-          <option>Education</option>
-          <option>Professional Services</option>
-          <option>Finance</option>
-          <option>Any Industry</option>
-        </select>
-
-      </div>
-
-      <div class="field">
-
-        <label>Company Size</label>
-
-        <select id="companySize">
-          <option>1–10</option>
-          <option>11–50</option>
-          <option>51–200</option>
-          <option>201–500</option>
-          <option>500+</option>
-        </select>
-
-      </div>
-
-      <div class="field">
-
-        <label>Decision Maker</label>
-
-        <select id="decisionMaker">
-          <option>Founder / CEO</option>
-          <option>Business Owner</option>
-          <option>CMO</option>
-          <option>Marketing Director</option>
-          <option>Growth Manager</option>
-        </select>
-
-      </div>
-
-      <div class="field">
-
-        <label>Lead Intent</label>
-
-        <select id="intent">
-          <option>High potential</option>
-          <option>Growing company</option>
-          <option>New company</option>
-          <option>Any qualified prospect</option>
-        </select>
-
-      </div>
-
-    </div>
-
-    <div class="actions">
-
-      <button
-        id="searchButton"
-        class="btn primary"
-        onclick="searchLeads()">
-        ⚡ Search Prospects
-      </button>
-
-      <button
-        class="btn"
-        onclick="resetSearch()">
-        Reset
-      </button>
-
-    </div>
-
-    <div class="info">
-      The production backend should return prospects from legitimate
-      data sources with source/verification information. The frontend
-      never invents a company or decision-maker.
-    </div>
-
-  </div>
-
-</section>
-
-<!-- LEADS -->
-
-<section id="leads" class="page">
-
-  <div class="panel">
-
-    <div class="panel-head">
-
-      <div>
-        <h3>Prospect Intelligence</h3>
-        <p class="muted small">
-          Source-backed prospects returned by the API.
-        </p>
-      </div>
-
-      <button class="btn"
-        onclick="navigate('find')">
-        + New Search
-      </button>
-
-    </div>
-
-    <div id="leadList" class="leads">
-
-      <div class="empty">
-        No prospects loaded yet.
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- CRM -->
-
-<section id="crm" class="page">
-
-  <div class="panel">
-
-    <div class="panel-head">
-
-      <div>
-        <h3>CRM Pipeline</h3>
-        <p class="muted small">
-          Manage your prospect journey.
-        </p>
-      </div>
-
-    </div>
-
-    <div class="pipeline">
-
-      <div class="stage">
-        <h4>NEW</h4>
-        <div id="stageNew"></div>
-      </div>
-
-      <div class="stage">
-        <h4>CONTACTED</h4>
-        <div id="stageContacted"></div>
-      </div>
-
-      <div class="stage">
-        <h4>REPLIED</h4>
-        <div id="stageReplied"></div>
-      </div>
-
-      <div class="stage">
-        <h4>MEETING</h4>
-        <div id="stageMeeting"></div>
-      </div>
-
-      <div class="stage">
-        <h4>WON</h4>
-        <div id="stageWon"></div>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- PREMIUM -->
-
-<section id="premium" class="page">
-
-  <div class="premium">
-
-    <span class="badge">
-      LEADFLOW AI PREMIUM
-    </span>
-
-    <h2>
-      Unlock advanced client intelligence
-    </h2>
-
-    <div class="price">
-      ₹799
-    </div>
-
-    <p class="muted">
-      Premium activation occurs only after the backend
-      confirms a successful payment.
-    </p>
-
-    <div class="features">
-
-      <div class="feature">
-        ✓ Expanded prospect discovery
-      </div>
-
-      <div class="feature">
-        ✓ Advanced global filters
-      </div>
-
-      <div class="feature">
-        ✓ Founder / CEO / CMO targeting
-      </div>
-
-      <div class="feature">
-        ✓ Source and verification information
-      </div>
-
-      <div class="feature">
-        ✓ Lead scoring
-      </div>
-
-      <div class="feature">
-        ✓ Outreach generation
-      </div>
-
-      <div class="feature">
-        ✓ CRM pipeline
-      </div>
-
-      <div class="feature">
-        ✓ Saved prospect history
-      </div>
-
-    </div>
-
-    <button
-      class="btn green"
-      style="width:100%"
-      onclick="createPayment()">
-      Continue to Secure ₹799 Checkout
-    </button>
-
-    <div class="payment-id">
-
-      <div class="muted small">
-        Configured payment destination
-      </div>
-
-      <code>
-        8374506945@fam
-      </code>
-
-    </div>
-
-    <p class="warning">
-      Production payments will be processed through the backend
-      and verified by the payment provider webhook before Premium
-      access is activated.
-    </p>
-
-  </div>
-
-</section>
-
-<!-- SETTINGS -->
-
-<section id="settings" class="page">
-
-  <div class="panel">
-
-    <div class="panel-head">
-
-      <div>
-        <h3>Account Settings</h3>
-        <p class="muted small">
-          Your account is controlled by the LeadFlow AI backend.
-        </p>
-      </div>
-
-    </div>
-
-    <div class="field">
-
-      <label>Email address</label>
-
-      <input
-        id="email"
-        type="email"
-        placeholder="you@example.com"
-        autocomplete="email">
-
-    </div>
-
-    <div class="actions">
-
-      <button
-        class="btn primary"
-        onclick="login()">
-        Login
-      </button>
-
-      <button
-        class="btn"
-        onclick="signup()">
-        Create Account
-      </button>
-
-      <button
-        class="btn"
-        onclick="logout()">
-        Logout
-      </button>
-
-    </div>
-
-    <div class="info">
-
-      Owner account:
-      <b>mdnawaz6052@gmail.com</b>
-
-      <br><br>
-
-      Owner privileges are verified by the backend.
-      Changing this HTML file cannot grant owner access.
-
-    </div>
-
-  </div>
-
-</section>
+  </main>
 
 </div>
 
-</main>
 
-</div>
-
-<!-- MOBILE NAVIGATION -->
-
-<nav class="mobile-nav">
-
-  <button
-    class="active"
-    onclick="navigate('dashboard',this)">
-    Home
-  </button>
-
-  <button
-    onclick="navigate('find',this)">
-    Find
-  </button>
-
-  <button
-    onclick="navigate('leads',this)">
-    Leads
-  </button>
-
-  <button
-    onclick="navigate('crm',this)">
-    CRM
-  </button>
-
-  <button
-    onclick="navigate('premium',this)">
-    Premium
-  </button>
-
-</nav>
-
-<!-- MODAL -->
+<!-- LEAD MODAL -->
 
 <div
-  id="modal"
-  class="modal">
+  class="modal-overlay"
+  id="leadModal">
 
-  <div class="modal-box">
+  <div class="modal">
 
-    <button
-      class="modal-close"
-      onclick="closeModal()">
-      ×
-    </button>
+    <div class="modal-header">
 
-    <h3 id="modalTitle">
-      LeadFlow AI
-    </h3>
-
-    <p id="modalText"></p>
-
-    <div class="actions">
+      <h2 id="leadModalTitle">
+        Add Lead
+      </h2>
 
       <button
-        class="btn"
-        onclick="closeModal()">
-        Close
+        type="button"
+        class="modal-close"
+        id="closeLeadModal"
+        aria-label="Close"
+      >
+        ✕
       </button>
 
     </div>
 
+    <form id="leadForm">
+
+      <input
+        type="hidden"
+        id="leadId"
+      >
+
+      <div class="form-grid">
+
+        <div class="form-group">
+
+          <label for="leadName">
+            Lead Name
+          </label>
+
+          <input
+            id="leadName"
+            type="text"
+            placeholder="John Doe"
+            required
+          >
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="leadCompany">
+            Company
+          </label>
+
+          <input
+            id="leadCompany"
+            type="text"
+            placeholder="Acme Technologies"
+            required
+          >
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="leadEmail">
+            Email
+          </label>
+
+          <input
+            id="leadEmail"
+            type="email"
+            placeholder="john@company.com"
+          >
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="leadPhone">
+            Phone
+          </label>
+
+          <input
+            id="leadPhone"
+            type="tel"
+            placeholder="+91 9876543210"
+          >
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="leadStatus">
+            Status
+          </label>
+
+          <select id="leadStatus">
+
+            <option value="New">
+              New
+            </option>
+
+            <option value="Contacted">
+              Contacted
+            </option>
+
+            <option value="Qualified">
+              Qualified
+            </option>
+
+            <option value="Converted">
+              Converted
+            </option>
+
+            <option value="Lost">
+              Lost
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="leadSource">
+            Source
+          </label>
+
+          <select id="leadSource">
+
+            <option value="Website">
+              Website
+            </option>
+
+            <option value="LinkedIn">
+              LinkedIn
+            </option>
+
+            <option value="Instagram">
+              Instagram
+            </option>
+
+            <option value="Referral">
+              Referral
+            </option>
+
+            <option value="Cold Outreach">
+              Cold Outreach
+            </option>
+
+            <option value="Other">
+              Other
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="leadValue">
+            Deal Value
+          </label>
+
+          <input
+            id="leadValue"
+            type="number"
+            min="0"
+            step="1"
+            placeholder="50000"
+          >
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="leadNextFollowup">
+            Next Follow-up
+          </label>
+
+          <input
+            id="leadNextFollowup"
+            type="date"
+          >
+
+        </div>
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="leadNotes">
+          Notes
+        </label>
+
+        <textarea
+          id="leadNotes"
+          rows="4"
+          placeholder="Add notes about this lead..."
+        ></textarea>
+
+      </div>
+
+      <div
+        class="modal-actions"
+      >
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          id="cancelLeadModal"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+        >
+          Save Lead
+        </button>
+
+      </div>
+
+    </form>
+
   </div>
 
 </div>
+
 
 <!-- TOAST -->
 
 <div
   id="toast"
-  class="toast">
-</div>
+  class="toast"
+  role="status"
+  aria-live="polite"
+></div>
+
 
 <script>
 
 /* =========================================================
-   LEADFLOW AI — BACKEND CONFIGURATION
+   LEADFLOW AI
+   FINAL JAVASCRIPT
 ========================================================= */
 
-/*
-  Replace this after your backend is deployed.
+(function(){
 
-  Example:
-  const API_BASE = "https://api.yourdomain.com";
-*/
-
-const API_BASE =
-  "https://YOUR-BACKEND-DOMAIN.com";
-
-const OWNER_EMAIL =
-  "mdnawaz6052@gmail.com";
-
-const PREMIUM_PRICE =
-  799;
-
-const PAYMENT_UPI =
-  "8374506945@fam";
-
-let currentUser =
-  null;
-
-let leads =
-  [];
+  "use strict";
 
 
-/* =========================================================
-   API CLIENT
-========================================================= */
+  /* =======================================================
+     HELPERS
+  ======================================================= */
 
-async function api(path, options = {}) {
+  const $ = function(id){
+    return document.getElementById(id);
+  };
 
-  if (
-    API_BASE.includes(
-      "YOUR-BACKEND-DOMAIN"
-    )
-  ) {
 
-    throw new Error(
-      "Backend is not connected yet. Deploy the backend and update API_BASE."
-    );
+  const escapeHTML = function(value){
 
-  }
-
-  const config = {
-
-    method:
-      options.method || "GET",
-
-    credentials:
-      "include",
-
-    headers: {
-
-      "Content-Type":
-        "application/json",
-
-      ...(options.headers || {})
-
-    }
+    return String(value ?? "")
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
 
   };
 
-  if (
-    options.body !== undefined
-  ) {
 
-    config.body =
-      typeof options.body === "string"
-        ? options.body
-        : JSON.stringify(options.body);
+  const formatCurrency = function(value){
 
-  }
+    const number =
+      Number(value) || 0;
 
-  const response =
-    await fetch(
-      API_BASE + path,
-      config
+    return "₹" +
+      number.toLocaleString(
+        "en-IN"
+      );
+
+  };
+
+
+  const showToast = function(message){
+
+    const toast = $("toast");
+
+    if(!toast){
+      return;
+    }
+
+    toast.textContent =
+      String(message || "");
+
+    toast.classList.add("show");
+
+    clearTimeout(
+      window.__leadflowToastTimer
     );
 
-  let data = {};
+    window.__leadflowToastTimer =
+      setTimeout(function(){
 
-  try {
+        toast.classList.remove("show");
 
-    data =
-      await response.json();
+      },2500);
 
-  } catch {
+  };
 
-    data = {};
+
+  const storageKey =
+    "leadflow_leads";
+
+
+  /* =======================================================
+     STATE
+  ======================================================= */
+
+  let leads = [];
+
+  let editingLeadId = null;
+
+
+  /* =======================================================
+     DEFAULT DATA
+  ======================================================= */
+
+  const defaultLeads = [
+
+    {
+      id:"lead_1",
+      name:"Rahul Sharma",
+      company:"TechNova Solutions",
+      email:"rahul@technova.example",
+      phone:"+91 9876543210",
+      status:"New",
+      source:"LinkedIn",
+      value:50000,
+      nextFollowup:"",
+      notes:"Interested in a business website."
+    },
+
+    {
+      id:"lead_2",
+      name:"Priya Verma",
+      company:"GrowthEdge Marketing",
+      email:"priya@growthedge.example",
+      phone:"+91 9123456780",
+      status:"Contacted",
+      source:"Instagram",
+      value:75000,
+      nextFollowup:"",
+      notes:"Discussed automation requirements."
+    },
+
+    {
+      id:"lead_3",
+      name:"Arjun Mehta",
+      company:"CloudWorks",
+      email:"arjun@cloudworks.example",
+      phone:"+91 9988776655",
+      status:"Qualified",
+      source:"Referral",
+      value:120000,
+      nextFollowup:"",
+      notes:"Strong prospect. Proposal requested."
+    },
+
+    {
+      id:"lead_4",
+      name:"Sara Khan",
+      company:"NextGen Retail",
+      email:"sara@nextgen.example",
+      phone:"+91 9012345678",
+      status:"Converted",
+      source:"Website",
+      value:95000,
+      nextFollowup:"",
+      notes:"Successfully converted."
+    }
+
+  ];
+
+
+  /* =======================================================
+     LOAD DATA
+  ======================================================= */
+
+  function loadLeads(){
+
+    try{
+
+      const saved =
+        localStorage.getItem(
+          storageKey
+        );
+
+      if(!saved){
+
+        leads =
+          defaultLeads.map(function(item){
+            return {...item};
+          });
+
+        saveLeads();
+
+        return;
+
+      }
+
+      const parsed =
+        JSON.parse(saved);
+
+      if(Array.isArray(parsed)){
+
+        leads = parsed;
+
+      }else{
+
+        leads =
+          defaultLeads.map(function(item){
+            return {...item};
+          });
+
+      }
+
+    }catch(error){
+
+      console.error(
+        "LeadFlow data load error:",
+        error
+      );
+
+      leads =
+        defaultLeads.map(function(item){
+          return {...item};
+        });
+
+    }
 
   }
 
-  if (!response.ok) {
 
-    throw new Error(
-      data.message ||
-      "API request failed."
-    );
+  /* =======================================================
+     SAVE DATA
+  ======================================================= */
+
+  function saveLeads(){
+
+    try{
+
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify(leads)
+      );
+
+    }catch(error){
+
+      console.error(
+        "LeadFlow data save error:",
+        error
+      );
+
+      showToast(
+        "Unable to save data on this device."
+      );
+
+    }
 
   }
 
-  return data;
 
-}
+  /* =======================================================
+     NAVIGATION
+  ======================================================= */
 
+  function showPage(pageName){
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
+    const pages =
+      document.querySelectorAll(
+        ".page"
+      );
 
-function navigate(id, button) {
+    pages.forEach(function(page){
 
-  document
-    .querySelectorAll(".page")
-    .forEach(page => {
-
-      page.classList.remove(
-        "active"
+      page.classList.toggle(
+        "active",
+        page.id === pageName
       );
 
     });
 
-  const page =
-    document.getElementById(id);
 
-  if (page) {
+    const buttons =
+      document.querySelectorAll(
+        "[data-page]"
+      );
 
-    page.classList.add(
-      "active"
-    );
+    buttons.forEach(function(button){
 
-  }
-
-  document
-    .querySelectorAll(
-      ".nav button,.mobile-nav button"
-    )
-    .forEach(item => {
-
-      item.classList.remove(
-        "active"
+      button.classList.toggle(
+        "active",
+        button.dataset.page === pageName
       );
 
     });
 
-  if (button) {
 
-    button.classList.add(
-      "active"
-    );
+    const title =
+      $("pageTitle");
 
-  } else {
+    const titles = {
+
+      dashboard:"Dashboard",
+
+      leads:"Leads",
+
+      companies:"Companies",
+
+      activities:"Activities",
+
+      pipeline:"Pipeline",
+
+      tasks:"Tasks",
+
+      deals:"Deals",
+
+      contacts:"Contacts",
+
+      reports:"Reports",
+
+      settings:"Settings"
+
+    };
+
+
+    if(title){
+
+      title.textContent =
+        titles[pageName] ||
+        "LeadFlow AI";
+
+    }
+
+  }
+
+
+  function setupNavigation(){
 
     document
       .querySelectorAll(
-        `.nav button[data-page="${id}"]`
+        "[data-page]"
       )
-      .forEach(item => {
+      .forEach(function(button){
 
-        item.classList.add(
-          "active"
+        button.addEventListener(
+          "click",
+          function(){
+
+            showPage(
+              this.dataset.page
+            );
+
+          }
         );
 
       });
 
   }
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
 
-}
+  /* =======================================================
+     DASHBOARD
+  ======================================================= */
 
+  function renderDashboard(){
 
-/* =========================================================
-   SIGN UP
-========================================================= */
+    const total =
+      leads.length;
 
-async function signup() {
+    const newLeads =
+      leads.filter(function(lead){
+        return lead.status === "New";
+      }).length;
 
-  const email =
-    document
-      .getElementById("email")
-      .value
-      .trim();
+    const qualified =
+      leads.filter(function(lead){
+        return lead.status === "Qualified";
+      }).length;
 
-  if (!email) {
+    const converted =
+      leads.filter(function(lead){
+        return lead.status === "Converted";
+      }).length;
 
-    toast(
-      "Enter your email address."
-    );
+    const totalValue =
+      leads.reduce(function(sum,lead){
 
-    return;
+        return sum +
+          (Number(lead.value) || 0);
 
-  }
+      },0);
 
-  const password =
-    prompt(
-      "Create your password:"
-    );
 
-  if (!password) {
-
-    toast(
-      "Password required."
-    );
-
-    return;
-
-  }
-
-  try {
-
-    const result =
-      await api(
-        "/api/auth/signup",
-        {
-          method: "POST",
-          body: {
-            email,
-            password
-          }
-        }
-      );
-
-    currentUser =
-      result.user ||
-      result;
-
-    updateAccount();
-
-    toast(
-      "Account created successfully."
-    );
-
-    await loadAccount();
-
-  } catch (error) {
-
-    toast(
-      error.message
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   LOGIN
-========================================================= */
-
-async function login() {
-
-  const email =
-    document
-      .getElementById("email")
-      .value
-      .trim();
-
-  if (!email) {
-
-    toast(
-      "Enter your email address."
-    );
-
-    return;
-
-  }
-
-  const password =
-    prompt(
-      "Enter your password:"
-    );
-
-  if (!password) {
-
-    toast(
-      "Password required."
-    );
-
-    return;
-
-  }
-
-  try {
-
-    const result =
-      await api(
-        "/api/auth/login",
-        {
-          method: "POST",
-          body: {
-            email,
-            password
-          }
-        }
-      );
-
-    currentUser =
-      result.user ||
-      result;
-
-    updateAccount();
-
-    toast(
-      "Login successful."
-    );
-
-    await loadAccount();
-
-    await loadUsage();
-
-    await loadLeads();
-
-  } catch (error) {
-
-    toast(
-      error.message
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-async function logout() {
-
-  try {
-
-    await api(
-      "/api/auth/logout",
-      {
-        method: "POST"
-      }
-    );
-
-  } catch {}
-
-  currentUser =
-    null;
-
-  leads =
-    [];
-
-  updateAccount();
-
-  renderLeads();
-
-  updateStats();
-
-  toast(
-    "Logged out."
-  );
-
-}
-
-
-/* =========================================================
-   ACCOUNT
-========================================================= */
-
-async function loadAccount() {
-
-  try {
-
-    const result =
-      await api(
-        "/api/me"
-      );
-
-    currentUser =
-      result.user ||
-      result;
-
-    updateAccount();
-
-  } catch {}
-
-}
-
-
-function updateAccount() {
-
-  const label =
-    document.getElementById(
-      "accountLabel"
-    );
-
-  if (!currentUser) {
-
-    label.textContent =
-      "Not signed in";
-
-    return;
-
-  }
-
-  if (
-    currentUser.role === "owner"
-  ) {
-
-    label.textContent =
-      "OWNER • UNLIMITED";
-
-    return;
-
-  }
-
-  label.textContent =
-    currentUser.email ||
-    "Signed in";
-
-}
-
-
-/* =========================================================
-   USAGE
-========================================================= */
-
-async function loadUsage() {
-
-  try {
-
-    const usage =
-      await api(
-        "/api/usage"
-      );
-
-    renderUsage(
-      usage
-    );
-
-  } catch {}
-
-}
-
-
-function renderUsage(usage) {
-
-  if (
-    usage &&
-    usage.premium
-  ) {
-
-    toast(
-      "Premium account active."
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   SEARCH PROSPECTS
-========================================================= */
-
-async function searchLeads() {
-
-  const button =
-    document.getElementById(
-      "searchButton"
-    );
-
-  button.disabled =
-    true;
-
-  button.textContent =
-    "Searching…";
-
-  const payload = {
-
-    service:
-      document.getElementById(
-        "service"
-      ).value,
-
-    country:
-      document.getElementById(
-        "country"
-      ).value,
-
-    industry:
-      document.getElementById(
-        "industry"
-      ).value,
-
-    companySize:
-      document.getElementById(
-        "companySize"
-      ).value,
-
-    decisionMaker:
-      document.getElementById(
-        "decisionMaker"
-      ).value,
-
-    intent:
-      document.getElementById(
-        "intent"
-      ).value
-
-  };
-
-  try {
-
-    const result =
-      await api(
-        "/api/leads/search",
-        {
-          method: "POST",
-          body: payload
-        }
-      );
-
-    leads =
-      Array.isArray(
-        result.leads
-      )
-        ? result.leads
-        : [];
-
-    renderLeads();
-
-    updateStats();
-
-    navigate(
-      "leads"
-    );
-
-    toast(
-      `${leads.length} prospects returned.`
-    );
-
-  } catch (error) {
-
-    toast(
-      error.message
-    );
-
-  } finally {
-
-    button.disabled =
-      false;
-
-    button.textContent =
-      "⚡ Search Prospects";
-
-  }
-
-}
-
-
-/* =========================================================
-   LOAD LEADS
-========================================================= */
-
-async function loadLeads() {
-
-  try {
-
-    const result =
-      await api(
-        "/api/leads"
-      );
-
-    leads =
-      Array.isArray(
-        result.leads
-      )
-        ? result.leads
-        : [];
-
-    renderLeads();
-
-    updateStats();
-
-  } catch {}
-
-}
-
-
-/* =========================================================
-   RENDER LEADS
-========================================================= */
-
-function renderLeads() {
-
-  const box =
-    document.getElementById(
-      "leadList"
-    );
-
-  if (!leads.length) {
-
-    box.innerHTML =
-      `<div class="empty">
-        No backend prospects loaded yet.
-      </div>`;
-
-    renderCRM();
-
-    return;
-
-  }
-
-  box.innerHTML =
-    leads.map(
-      (lead,index) => {
-
-        const company =
-          escapeHTML(
-            lead.company ||
-            "Unnamed company"
-          );
-
-        const person =
-          escapeHTML(
-            lead.decision_maker ||
-            "Decision maker unavailable"
-          );
-
-        const country =
-          escapeHTML(
-            lead.country ||
-            "—"
-          );
-
-        const industry =
-          escapeHTML(
-            lead.industry ||
-            "—"
-          );
-
-        const size =
-          escapeHTML(
-            lead.company_size ||
-            lead.size ||
-            "—"
-          );
-
-        const reason =
-          escapeHTML(
-            lead.reason ||
-            "No qualification information."
-          );
-
-        const score =
-          Number.isFinite(
-            Number(lead.score)
+    const conversionRate =
+      total
+        ? Math.round(
+            converted /
+            total *
+            100
           )
-            ? Number(lead.score)
-            : "—";
+        : 0;
 
-        return `
 
-        <article class="lead">
+    const setText =
+      function(id,value){
 
-          <div>
+        const element =
+          $(id);
 
-            <div class="lead-title">
-
-              <h4>
-                ${company}
-              </h4>
-
-              <span class="badge">
-                ${person}
-              </span>
-
-            </div>
-
-            <div class="lead-meta">
-
-              ${country}
-              ·
-              ${industry}
-              ·
-              ${size}
-
-              <br>
-
-              <b>
-                Qualification:
-              </b>
-
-              ${reason}
-
-              ${
-                lead.source
-                  ? `<br>
-                     <b>Source:</b>
-                     ${escapeHTML(
-                       lead.source
-                     )}`
-                  : ""
-              }
-
-            </div>
-
-            <div class="lead-actions">
-
-              <button
-                class="btn"
-                onclick="viewLead(${index})">
-                View
-              </button>
-
-              <button
-                class="btn"
-                onclick="saveLead(${index})">
-                Save
-              </button>
-
-              <button
-                class="btn"
-                onclick="generateOutreach(${index})">
-                Generate Message
-              </button>
-
-              <button
-                class="btn"
-                onclick="updateLeadStatus(${index},'CONTACTED')">
-                Contacted
-              </button>
-
-              ${
-                lead.website
-                  ? `<button
-                       class="btn"
-                       onclick="openSafeUrl(
-                         '${encodeURI(
-                           lead.website
-                         )}'
-                       )">
-                       Website
-                     </button>`
-                  : ""
-              }
-
-            </div>
-
-          </div>
-
-          <div class="score">
-
-            <strong>
-              ${score}
-            </strong>
-
-            <small>
-              FIT SCORE
-            </small>
-
-          </div>
-
-        </article>
-
-        `;
-
-      }
-    ).join("");
-
-  renderCRM();
-
-}
-
-
-/* =========================================================
-   VIEW LEAD
-========================================================= */
-
-async function viewLead(index) {
-
-  const lead =
-    leads[index];
-
-  if (!lead) return;
-
-  let detail =
-    lead;
-
-  if (lead.id) {
-
-    try {
-
-      const result =
-        await api(
-          `/api/leads/${encodeURIComponent(
-            lead.id
-          )}`
-        );
-
-      detail =
-        result.lead ||
-        result;
-
-    } catch {}
-
-  }
-
-  openModal(
-    detail.company ||
-    "Prospect",
-
-`Decision maker:
-${detail.decision_maker || "Unavailable"}
-
-Country:
-${detail.country || "Unavailable"}
-
-Industry:
-${detail.industry || "Unavailable"}
-
-Company size:
-${detail.company_size || "Unavailable"}
-
-Fit score:
-${detail.score ?? "Unavailable"}
-
-Why it may fit:
-${detail.reason || "Unavailable"}
-
-Source:
-${detail.source || "Unavailable"}
-
-Verification:
-${detail.verification_date || "Unavailable"}`
-  );
-
-}
-
-
-/* =========================================================
-   SAVE LEAD
-========================================================= */
-
-async function saveLead(index) {
-
-  const lead =
-    leads[index];
-
-  if (!lead || !lead.id) {
-
-    toast(
-      "Backend lead ID required."
-    );
-
-    return;
-
-  }
-
-  try {
-
-    await api(
-      `/api/leads/${encodeURIComponent(
-        lead.id
-      )}/save`,
-      {
-        method: "POST"
-      }
-    );
-
-    toast(
-      "Prospect saved."
-    );
-
-  } catch (error) {
-
-    toast(
-      error.message
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   UPDATE STATUS
-========================================================= */
-
-async function updateLeadStatus(
-  index,
-  status
-) {
-
-  const lead =
-    leads[index];
-
-  if (!lead || !lead.id) {
-
-    toast(
-      "Backend lead ID required."
-    );
-
-    return;
-
-  }
-
-  try {
-
-    const result =
-      await api(
-        `/api/leads/${encodeURIComponent(
-          lead.id
-        )}/status`,
-        {
-          method: "PATCH",
-          body: {
-            status
-          }
+        if(element){
+          element.textContent =
+            value;
         }
-      );
 
-    leads[index] =
-      result.lead ||
-      {
-        ...lead,
-        status
       };
 
-    renderLeads();
 
-    updateStats();
-
-    toast(
-      "Lead status updated."
+    setText(
+      "totalLeads",
+      total
     );
 
-  } catch (error) {
-
-    toast(
-      error.message
+    setText(
+      "newLeads",
+      newLeads
     );
+
+    setText(
+      "qualifiedLeads",
+      qualified
+    );
+
+    setText(
+      "conversionRate",
+      conversionRate + "%"
+    );
+
+    setText(
+      "pipelineValue",
+      formatCurrency(totalValue)
+    );
+
+
+    renderRecentLeads();
 
   }
 
-}
+
+  function renderRecentLeads(){
+
+    const container =
+      $("recentLeads");
+
+    if(!container){
+      return;
+    }
 
 
-/* =========================================================
-   OUTREACH
-========================================================= */
-
-async function generateOutreach(
-  index
-) {
-
-  const lead =
-    leads[index];
-
-  if (!lead || !lead.id) {
-
-    toast(
-      "Backend lead ID required."
-    );
-
-    return;
-
-  }
-
-  try {
-
-    const result =
-      await api(
-        "/api/outreach/generate",
-        {
-          method: "POST",
-          body: {
-            leadId:
-              lead.id,
-
-            service:
-              document.getElementById(
-                "service"
-              ).value
-          }
-        }
-      );
-
-    openModal(
-      "Personalized Outreach",
-      result.message ||
-      result.outreach ||
-      "No message returned."
-    );
-
-  } catch (error) {
-
-    toast(
-      error.message
-    );
-
-  }
-
-}
+    const recent =
+      leads.slice(
+        -5
+      ).reverse();
 
 
-/* =========================================================
-   PAYMENT
-========================================================= */
+    if(!recent.length){
 
-async function createPayment() {
-
-  try {
-
-    const result =
-      await api(
-        "/api/payment/create",
-        {
-          method: "POST",
-          body: {
-            amount:
-              PREMIUM_PRICE,
-
-            currency:
-              "INR"
-          }
-        }
-      );
-
-    if (
-      result.checkoutUrl
-    ) {
-
-      window.location.href =
-        result.checkoutUrl;
+      container.innerHTML =
+        '<div class="empty">No leads yet.</div>';
 
       return;
 
     }
 
-    if (
-      result.paymentUrl
-    ) {
 
-      window.location.href =
-        result.paymentUrl;
-
-      return;
-
-    }
-
-    toast(
-      "Payment order created, but checkout URL was not returned."
-    );
-
-  } catch (error) {
-
-    toast(
-      error.message
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   PAYMENT STATUS
-========================================================= */
-
-async function checkPaymentStatus() {
-
-  try {
-
-    const result =
-      await api(
-        "/api/payment/status"
-      );
-
-    if (
-      result.premium
-    ) {
-
-      currentUser =
-        result.user ||
-        currentUser;
-
-      updateAccount();
-
-      toast(
-        "Premium payment verified."
-      );
-
-    }
-
-  } catch (error) {
-
-    toast(
-      error.message
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   CRM
-========================================================= */
-
-function renderCRM() {
-
-  const stages = {
-
-    NEW:
-      "stageNew",
-
-    CONTACTED:
-      "stageContacted",
-
-    REPLIED:
-      "stageReplied",
-
-    MEETING:
-      "stageMeeting",
-
-    WON:
-      "stageWon"
-
-  };
-
-  Object
-    .values(stages)
-    .forEach(id => {
-
-      const box =
-        document.getElementById(
-          id
-        );
-
-      if (box) {
-
-        box.innerHTML =
-          "";
-
-      }
-
-    });
-
-  leads.forEach(
-    lead => {
-
-      const status =
-        String(
-          lead.status ||
-          "NEW"
-        ).toUpperCase();
-
-      const box =
-        document.getElementById(
-          stages[status] ||
-          stages.NEW
-        );
-
-      if (!box) return;
-
-      const card =
-        document.createElement(
-          "div"
-        );
-
-      card.className =
-        "stage-card";
-
-      card.textContent =
-        lead.company ||
-        "Unnamed company";
-
-      box.appendChild(
-        card
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   STATS
-========================================================= */
-
-function updateStats() {
-
-  document.getElementById(
-    "statFound"
-  ).textContent =
-    leads.length;
-
-  document.getElementById(
-    "statQualified"
-  ).textContent =
-    leads.filter(
-      lead =>
-        Number(lead.score) >= 80
-    ).length;
-
-  document.getElementById(
-    "statContacted"
-  ).textContent =
-    leads.filter(
-      lead =>
-        String(
-          lead.status
-        ).toUpperCase()
-        === "CONTACTED"
-    ).length;
-
-  document.getElementById(
-    "statWon"
-  ).textContent =
-    leads.filter(
-      lead =>
-        String(
-          lead.status
-        ).toUpperCase()
-        === "WON"
-    ).length;
-
-}
-
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-function openModal(
-  title,
-  text
-) {
-
-  document.getElementById(
-    "modalTitle"
-  ).textContent = title;
-
-  document.getElementById(
-    "modalText"
-  ).textContent = text;
-
-  document.getElementById(
-    "modal"
-  ).classList.add("show");
-}
-
-function closeModal() {
-
-  document.getElementById(
-    "modal"
-  ).classList.remove("show");
-
-}
-
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-let toastTimer;
-
-function toast(message) {
-
-  const box =
-    document.getElementById("toast");
-
-  if (!box) return;
-
-  box.textContent = message;
-
-  box.classList.add("show");
-
-  clearTimeout(toastTimer);
-
-  toastTimer = setTimeout(() => {
-
-    box.classList.remove("show");
-
-  }, 3200);
-
-}
-
-
-/* =========================================================
-   SAFE HTML
-========================================================= */
-
-function escapeHTML(value) {
-
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-}
-
-
-/* =========================================================
-   SAFE EXTERNAL URL
-========================================================= */
-
-function openSafeUrl(value) {
-
-  try {
-
-    const url = new URL(value);
-
-    if (
-      url.protocol !== "https:" &&
-      url.protocol !== "http:"
-    ) {
-      throw new Error("Invalid URL");
-    }
-
-    window.open(
-      url.href,
-      "_blank",
-      "noopener,noreferrer"
-    );
-
-  } catch {
-
-    toast("Invalid website URL.");
-
-  }
-
-}
-
-
-/* =========================================================
-   PAYMENT
-========================================================= */
-
-async function createPayment() {
-
-  try {
-
-    if (!currentUser) {
-
-      toast(
-        "Please login before purchasing Premium."
-      );
-
-      navigate("settings");
-
-      return;
-
-    }
-
-    const result =
-      await api(
-        "/api/payment/create",
-        {
-          method: "POST",
-
-          body: {
-            amount: 799,
-            currency: "INR"
-          }
-        }
-      );
-
-    if (result.checkoutUrl) {
-
-      window.location.href =
-        result.checkoutUrl;
-
-      return;
-
-    }
-
-    toast(
-      "Payment checkout is not configured yet."
-    );
-
-  } catch (error) {
-
-    toast(
-      error.message ||
-      "Unable to create payment."
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   PAYMENT STATUS
-========================================================= */
-
-async function checkPaymentStatus() {
-
-  try {
-
-    const result =
-      await api(
-        "/api/payment/status"
-      );
-
-    if (result.premium === true) {
-
-      currentUser =
-        result.user ||
-        currentUser;
-
-      updateAccount();
-
-      toast(
-        "Premium activated."
-      );
-
-    }
-
-  } catch (error) {
-
-    console.error(
-      "Payment status:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   ACCOUNT
-========================================================= */
-
-async function loadAccount() {
-
-  try {
-
-    const result =
-      await api("/api/me");
-
-    currentUser =
-      result.user ||
-      result;
-
-    updateAccount();
-
-  } catch {
-
-    currentUser = null;
-
-    updateAccount();
-
-  }
-
-}
-
-
-function updateAccount() {
-
-  const label =
-    document.getElementById(
-      "accountLabel"
-    );
-
-  if (!label) return;
-
-  if (!currentUser) {
-
-    label.textContent =
-      "Not signed in";
-
-    return;
-
-  }
-
-  if (
-    currentUser.role ===
-    "owner"
-  ) {
-
-    label.textContent =
-      "OWNER • UNLIMITED";
-
-    return;
-
-  }
-
-  label.textContent =
-    currentUser.email ||
-    "Signed in";
-
-}
-
-
-/* =========================================================
-   USAGE
-========================================================= */
-
-async function loadUsage() {
-
-  try {
-
-    const result =
-      await api(
-        "/api/usage"
-      );
-
-    renderUsage(
-      result
-    );
-
-  } catch {}
-
-}
-
-
-function renderUsage(
-  usage
-) {
-
-  const box =
-    document.getElementById(
-      "usageStatus"
-    );
-
-  if (!box) return;
-
-  if (!usage) {
-
-    box.textContent =
-      "Usage information unavailable.";
-
-    return;
-
-  }
-
-  if (usage.unlimited) {
-
-    box.textContent =
-      "Unlimited access";
-
-    return;
-
-  }
-
-  const hours =
-    usage.hoursRemaining ??
-    0;
-
-  const prospects =
-    usage.prospectsRemaining ??
-    0;
-
-  box.textContent =
-    `${hours} hours remaining • ${prospects} prospects remaining`;
-
-}
-
-
-/* =========================================================
-   SEARCH PROSPECTS
-========================================================= */
-
-async function searchLeads() {
-
-  const button =
-    document.getElementById(
-      "searchButton"
-    );
-
-  if (!currentUser) {
-
-    toast(
-      "Please login first."
-    );
-
-    navigate("settings");
-
-    return;
-
-  }
-
-  if (button) {
-
-    button.disabled =
-      true;
-
-    button.textContent =
-      "Searching…";
-
-  }
-
-  const service =
-    document.getElementById(
-      "service"
-    )?.value || "";
-
-  const country =
-    document.getElementById(
-      "country"
-    )?.value || "";
-
-  const industry =
-    document.getElementById(
-      "industry"
-    )?.value || "";
-
-  const companySize =
-    document.getElementById(
-      "companySize"
-    )?.value || "";
-
-  const decisionMaker =
-    document.getElementById(
-      "decisionMaker"
-    )?.value || "";
-
-  const intent =
-    document.getElementById(
-      "intent"
-    )?.value || "";
-
-  try {
-
-    const result =
-      await api(
-        "/api/leads/search",
-        {
-          method: "POST",
-
-          body: {
-            service,
-            country,
-            industry,
-            companySize,
-            decisionMaker,
-            intent
-          }
-        }
-      );
-
-    leads =
-      Array.isArray(
-        result.leads
-      )
-        ? result.leads
-        : [];
-
-    renderLeads();
-
-    updateStats();
-
-    navigate("leads");
-
-    toast(
-      `${leads.length} prospects found.`
-    );
-
-    await loadUsage();
-
-  } catch (error) {
-
-    toast(
-      error.message ||
-      "Prospect search failed."
-    );
-
-  } finally {
-
-    if (button) {
-
-      button.disabled =
-        false;
-
-      button.textContent =
-        "⚡ Search Prospects";
-
-    }
-
-  }
-
-}
-
-
-/* =========================================================
-   LOAD SAVED LEADS
-========================================================= */
-
-async function loadLeads() {
-
-  try {
-
-    const result =
-      await api(
-        "/api/leads"
-      );
-
-    leads =
-      Array.isArray(
-        result.leads
-      )
-        ? result.leads
-        : [];
-
-    renderLeads();
-
-    updateStats();
-
-  } catch {
-
-    leads = [];
-
-    renderLeads();
-
-    updateStats();
-
-  }
-
-}
-
-
-/* =========================================================
-   RENDER LEADS
-========================================================= */
-
-function renderLeads() {
-
-  const box =
-    document.getElementById(
-      "leadList"
-    );
-
-  if (!box) return;
-
-  if (!leads.length) {
-
-    box.innerHTML = `
-      <div class="empty">
-        No verified prospects available yet.
-      </div>
-    `;
-
-    renderCRM();
-
-    return;
-
-  }
-
-  box.innerHTML =
-    leads.map(
-      (lead, index) => {
-
-        const company =
-          escapeHTML(
-            lead.company ||
-            "Unnamed company"
-          );
-
-        const person =
-          escapeHTML(
-            lead.decision_maker ||
-            "Decision maker unavailable"
-          );
-
-        const country =
-          escapeHTML(
-            lead.country ||
-            "—"
-          );
-
-        const industry =
-          escapeHTML(
-            lead.industry ||
-            "—"
-          );
-
-        const size =
-          escapeHTML(
-            lead.company_size ||
-            lead.size ||
-            "—"
-          );
-
-        const reason =
-          escapeHTML(
-            lead.reason ||
-            "No qualification information."
-          );
-
-        const score =
-          lead.score ??
-          "—";
+    container.innerHTML =
+      recent.map(function(lead){
 
         return `
-          <article class="lead">
+          <div class="recent-lead">
 
             <div>
 
-              <div class="lead-title">
-
-                <h4>
-                  ${company}
-                </h4>
-
-                <span class="badge">
-                  ${person}
-                </span>
-
-              </div>
-
-              <div class="lead-meta">
-
-                ${country}
-                ·
-                ${industry}
-                ·
-                ${size}
-
-                <br><br>
-
-                <b>Why this prospect:</b>
-                ${reason}
-
-                ${
-                  lead.source
-                    ? `
-                      <br><br>
-                      <b>Source:</b>
-                      ${escapeHTML(
-                        lead.source
-                      )}
-                    `
-                    : ""
-                }
-
-              </div>
-
-              <div class="lead-actions">
-
-                <button
-                  class="btn"
-                  onclick="viewLead(${index})">
-                  View
-                </button>
-
-                <button
-                  class="btn"
-                  onclick="saveLead(${index})">
-                  Save
-                </button>
-
-                <button
-                  class="btn"
-                  onclick="generateOutreach(${index})">
-                  AI Message
-                </button>
-
-                <button
-                  class="btn"
-                  onclick="updateLeadStatus(
-                    ${index},
-                    'CONTACTED'
-                  )">
-                  Contacted
-                </button>
-
-                ${
-                  lead.website
-                    ? `
-                      <button
-                        class="btn"
-                        onclick="openSafeUrl(
-                          '${encodeURI(
-                            lead.website
-                          )}'
-                        )">
-                        Website
-                      </button>
-                    `
-                    : ""
-                }
-
-              </div>
-
-            </div>
-
-            <div class="score">
-
               <strong>
-                ${escapeHTML(score)}
+                ${escapeHTML(lead.name)}
               </strong>
 
-              <small>
-                FIT SCORE
-              </small>
+              <div class="muted">
+                ${escapeHTML(lead.company)}
+              </div>
 
             </div>
 
-          </article>
+            <span class="badge">
+              ${escapeHTML(lead.status)}
+            </span>
+
+          </div>
         `;
 
-      }
-    ).join("");
+      }).join("");
 
-  renderCRM();
-
-}
+  }
 
 
-/* =========================================================
-   VIEW LEAD
-========================================================= */
+  /* =======================================================
+     LEADS TABLE
+  ======================================================= */
 
-async function viewLead(index) {
+  function renderLeads(){
 
-  const lead =
-    leads[index];
+    const container =
+      $("leadsTableBody");
 
-  if (!lead) return;
+    if(!container){
+      return;
+    }
 
-  let detail =
-    lead;
 
-  if (lead.id) {
+    if(!leads.length){
 
-    try {
+      container.innerHTML = `
+        <tr>
+          <td colspan="8">
+            <div class="empty">
+              No leads found.
+            </div>
+          </td>
+        </tr>
+      `;
 
-      const result =
-        await api(
-          `/api/leads/${encodeURIComponent(
-            lead.id
-          )}`
+      return;
+
+    }
+
+
+    const search =
+      String(
+        $("leadSearch")?.value ||
+        ""
+      )
+      .trim()
+      .toLowerCase();
+
+
+    const status =
+      $("leadFilterStatus")?.value ||
+      "All";
+
+
+    const source =
+      $("leadFilterSource")?.value ||
+      "All";
+
+
+    const filtered =
+      leads.filter(function(lead){
+
+        const text = [
+          lead.name,
+          lead.company,
+          lead.email,
+          lead.phone
+        ]
+        .join(" ")
+        .toLowerCase();
+
+
+        const matchesSearch =
+          !search ||
+          text.includes(search);
+
+
+        const matchesStatus =
+          status === "All" ||
+          lead.status === status;
+
+
+        const matchesSource =
+          source === "All" ||
+          lead.source === source;
+
+
+        return (
+          matchesSearch &&
+          matchesStatus &&
+          matchesSource
         );
 
-      detail =
-        result.lead ||
-        result;
-
-    } catch {}
-
-  }
-
-  openModal(
-    detail.company ||
-    "Prospect Details",
-
-`Decision maker:
-${detail.decision_maker || "Unavailable"}
-
-Country:
-${detail.country || "Unavailable"}
-
-Industry:
-${detail.industry || "Unavailable"}
-
-Company size:
-${detail.company_size || "Unavailable"}
-
-Fit score:
-${detail.score ?? "Unavailable"}
-
-Qualification:
-${detail.reason || "Unavailable"}
-
-Source:
-${detail.source || "Unavailable"}
-
-Verification:
-${detail.verification_date || "Unavailable"}`
-  );
-
-}
+      });
 
 
-/* =========================================================
-   SAVE LEAD
-========================================================= */
+    if(!filtered.length){
 
-async function saveLead(index) {
+      container.innerHTML = `
+        <tr>
+          <td colspan="8">
+            <div class="empty">
+              No matching leads.
+            </div>
+          </td>
+        </tr>
+      `;
 
-  const lead =
-    leads[index];
+      return;
 
-  if (!lead?.id) {
-
-    toast(
-      "This prospect does not have a backend ID."
-    );
-
-    return;
-
-  }
-
-  try {
-
-    await api(
-      `/api/leads/${encodeURIComponent(
-        lead.id
-      )}/save`,
-      {
-        method: "POST"
-      }
-    );
-
-    toast(
-      "Prospect saved."
-    );
-
-  } catch (error) {
-
-    toast(
-      error.message ||
-      "Unable to save prospect."
-    );
-
-  }
-
-}
+    }
 
 
-/* =========================================================
-   UPDATE LEAD STATUS
-========================================================= */
+    container.innerHTML =
+      filtered.map(function(lead){
 
-async function updateLeadStatus(
-  index,
-  status
-) {
+        const statusClass =
+          lead.status === "Converted"
+            ? "badge-green"
+            : lead.status === "Lost"
+              ? "badge-red"
+              : lead.status === "Qualified"
+                ? "badge-yellow"
+                : "";
 
-  const lead =
-    leads[index];
 
-  if (!lead?.id) {
+        return `
+          <tr>
 
-    toast(
-      "This prospect does not have a backend ID."
-    );
+            <td>
+              <strong>
+                ${escapeHTML(lead.name)}
+              </strong>
+            </td>
 
-    return;
+            <td>
+              ${escapeHTML(lead.company)}
+            </td>
 
-  }
+            <td>
+              ${escapeHTML(lead.email || "—")}
+            </td>
 
-  try {
+            <td>
+              ${escapeHTML(lead.phone || "—")}
+            </td>
 
-    const result =
-      await api(
-        `/api/leads/${encodeURIComponent(
-          lead.id
-        )}/status`,
-        {
-          method: "PATCH",
+            <td>
+              <span class="badge ${statusClass}">
+                ${escapeHTML(lead.status)}
+              </span>
+            </td>
 
-          body: {
-            status
+            <td>
+              ${escapeHTML(lead.source || "—")}
+            </td>
+
+            <td>
+              ${formatCurrency(lead.value)}
+            </td>
+
+            <td>
+
+              <div class="table-actions">
+
+                <button
+                  type="button"
+                  class="btn btn-small btn-secondary"
+                  data-edit-lead="${escapeHTML(lead.id)}"
+                >
+                  Edit
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-small btn-danger"
+                  data-delete-lead="${escapeHTML(lead.id)}"
+                >
+                  Delete
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+        `;
+
+      }).join("");
+
+
+    container
+      .querySelectorAll(
+        "[data-edit-lead]"
+      )
+      .forEach(function(button){
+
+        button.addEventListener(
+          "click",
+          function(){
+
+            openLeadModal(
+              this.dataset.editLead
+            );
+
           }
-        }
-      );
-
-    leads[index] =
-      result.lead ||
-      {
-        ...lead,
-        status
-      };
-
-    renderLeads();
-
-    updateStats();
-
-    toast(
-      "Lead status updated."
-    );
-
-  } catch (error) {
-
-    toast(
-      error.message ||
-      "Unable to update status."
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   AI OUTREACH
-========================================================= */
-
-async function generateOutreach(
-  index
-) {
-
-  const lead =
-    leads[index];
-
-  if (!lead?.id) {
-
-    toast(
-      "Backend lead ID required."
-    );
-
-    return;
-
-  }
-
-  try {
-
-    const result =
-      await api(
-        "/api/outreach/generate",
-        {
-          method: "POST",
-
-          body: {
-            leadId:
-              lead.id,
-
-            service:
-              document.getElementById(
-                "service"
-              )?.value || ""
-          }
-        }
-      );
-
-    openModal(
-      "Personalized Outreach",
-      result.message ||
-      result.outreach ||
-      "No message returned."
-    );
-
-  } catch (error) {
-
-    toast(
-      error.message ||
-      "Unable to generate outreach."
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   CRM PIPELINE
-========================================================= */
-
-function renderCRM() {
-
-  const stages = {
-
-    NEW:
-      "stageNew",
-
-    CONTACTED:
-      "stageContacted",
-
-    REPLIED:
-      "stageReplied",
-
-    MEETING:
-      "stageMeeting",
-
-    WON:
-      "stageWon"
-
-  };
-
-  Object
-    .values(stages)
-    .forEach(id => {
-
-      const box =
-        document.getElementById(
-          id
         );
 
-      if (box) {
+      });
 
-        box.innerHTML =
-          "";
+
+    container
+      .querySelectorAll(
+        "[data-delete-lead]"
+      )
+      .forEach(function(button){
+
+        button.addEventListener(
+          "click",
+          function(){
+
+            deleteLead(
+              this.dataset.deleteLead
+            );
+
+          }
+        );
+
+      });
+
+  }
+
+
+  /* =======================================================
+     LEAD MODAL
+  ======================================================= */
+
+  function openLeadModal(id){
+
+    const modal =
+      $("leadModal");
+
+    if(!modal){
+      return;
+    }
+
+
+    editingLeadId =
+      id || null;
+
+
+    const title =
+      $("leadModalTitle");
+
+    if(title){
+
+      title.textContent =
+        id
+          ? "Edit Lead"
+          : "Add Lead";
+
+    }
+
+
+    if(!id){
+
+      clearLeadForm();
+
+      modal.classList.add(
+        "show"
+      );
+
+      return;
+
+    }
+
+
+    const lead =
+      leads.find(function(item){
+
+        return String(item.id) ===
+          String(id);
+
+      });
+
+
+    if(!lead){
+
+      showToast(
+        "Lead not found."
+      );
+
+      return;
+
+    }
+
+
+    if($("leadId"))
+      $("leadId").value =
+        lead.id || "";
+
+    if($("leadName"))
+      $("leadName").value =
+        lead.name || "";
+
+    if($("leadCompany"))
+      $("leadCompany").value =
+        lead.company || "";
+
+    if($("leadEmail"))
+      $("leadEmail").value =
+        lead.email || "";
+
+    if($("leadPhone"))
+      $("leadPhone").value =
+        lead.phone || "";
+
+    if($("leadStatus"))
+      $("leadStatus").value =
+        lead.status || "New";
+
+    if($("leadSource"))
+      $("leadSource").value =
+        lead.source || "Website";
+
+    if($("leadValue"))
+      $("leadValue").value =
+        lead.value || "";
+
+    if($("leadNextFollowup"))
+      $("leadNextFollowup").value =
+        lead.nextFollowup || "";
+
+    if($("leadNotes"))
+      $("leadNotes").value =
+        lead.notes || "";
+
+
+    modal.classList.add(
+      "show"
+    );
+
+  }
+
+
+  function clearLeadForm(){
+
+    const form =
+      $("leadForm");
+
+    if(form){
+      form.reset();
+    }
+
+
+    if($("leadId"))
+      $("leadId").value =
+        "";
+
+    if($("leadStatus"))
+      $("leadStatus").value =
+        "New";
+
+    if($("leadSource"))
+      $("leadSource").value =
+        "Website";
+
+  }
+
+
+  function closeLeadModal(){
+
+    const modal =
+      $("leadModal");
+
+    if(modal){
+
+      modal.classList.remove(
+        "show"
+      );
+
+    }
+
+    editingLeadId =
+      null;
+
+    clearLeadForm();
+
+  }
+
+
+  /* =======================================================
+     CREATE / UPDATE LEAD
+  ======================================================= */
+
+  function saveLeadFromForm(event){
+
+    event.preventDefault();
+
+
+    const name =
+      $("leadName")?.value.trim() ||
+      "";
+
+    const company =
+      $("leadCompany")?.value.trim() ||
+      "";
+
+    if(!name || !company){
+
+      showToast(
+        "Name and company are required."
+      );
+
+      return;
+
+    }
+
+
+    const data = {
+
+      name:name,
+
+      company:company,
+
+      email:
+        $("leadEmail")?.value.trim() ||
+        "",
+
+      phone:
+        $("leadPhone")?.value.trim() ||
+        "",
+
+      status:
+        $("leadStatus")?.value ||
+        "New",
+
+      source:
+        $("leadSource")?.value ||
+        "Website",
+
+      value:
+        Number(
+          $("leadValue")?.value
+        ) || 0,
+
+      nextFollowup:
+        $("leadNextFollowup")?.value ||
+        "",
+
+      notes:
+        $("leadNotes")?.value.trim() ||
+        ""
+
+    };
+
+
+    if(editingLeadId){
+
+      const index =
+        leads.findIndex(function(lead){
+
+          return String(lead.id) ===
+            String(editingLeadId);
+
+        });
+
+
+      if(index >= 0){
+
+        leads[index] = {
+
+          ...leads[index],
+
+          ...data
+
+        };
+
+        showToast(
+          "Lead updated successfully."
+        );
 
       }
+
+    }else{
+
+      leads.push({
+
+        id:
+          "lead_" +
+          Date.now() +
+          "_" +
+          Math.random()
+            .toString(36)
+            .slice(2,8),
+
+        ...data,
+
+        createdAt:
+          new Date().toISOString()
+
+      });
+
+
+      showToast(
+        "Lead added successfully."
+      );
+
+    }
+
+
+    saveLeads();
+
+    renderAll();
+
+    closeLeadModal();
+
+  }
+
+
+  /* =======================================================
+     DELETE LEAD
+  ======================================================= */
+
+  function deleteLead(id){
+
+    const lead =
+      leads.find(function(item){
+
+        return String(item.id) ===
+          String(id);
+
+      });
+
+
+    if(!lead){
+      return;
+    }
+
+
+    const confirmed =
+      window.confirm(
+        "Delete " +
+        (lead.name || "this lead") +
+        "?"
+      );
+
+
+    if(!confirmed){
+      return;
+    }
+
+
+    leads =
+      leads.filter(function(item){
+
+        return String(item.id) !==
+          String(id);
+
+      });
+
+
+    saveLeads();
+
+    renderAll();
+
+    showToast(
+            "Lead deleted successfully."
+    );
+
+    closeLeadModal();
+
+  }
+
+}
+
+
+/* =========================
+   SEARCH LEADS
+========================= */
+
+function searchLeads(){
+
+  var input =
+    document.getElementById("leadSearch");
+
+  if(!input){
+
+    renderAll();
+
+    return;
+
+  }
+
+  var query =
+    input.value
+      .trim()
+      .toLowerCase();
+
+  var filtered =
+    leads.filter(function(item){
+
+      return (
+
+        String(item.name || "")
+          .toLowerCase()
+          .includes(query)
+
+        ||
+
+        String(item.company || "")
+          .toLowerCase()
+          .includes(query)
+
+        ||
+
+        String(item.email || "")
+          .toLowerCase()
+          .includes(query)
+
+        ||
+
+        String(item.phone || "")
+          .toLowerCase()
+          .includes(query)
+
+        ||
+
+        String(item.status || "")
+          .toLowerCase()
+          .includes(query)
+
+      );
 
     });
 
-  leads.forEach(
-    lead => {
+  renderLeads(filtered);
 
-      const status =
-        String(
-          lead.status ||
-          "NEW"
-        ).toUpperCase();
+}
 
-      const box =
-        document.getElementById(
-          stages[status] ||
-          stages.NEW
-        );
 
-      if (!box) return;
+/* =========================
+   STATUS FILTER
+========================= */
 
-      const card =
-        document.createElement(
-          "div"
-        );
+function filterLeads(){
 
-      card.className =
-        "stage-card";
+  var filter =
+    document.getElementById("leadStatusFilter");
 
-      card.textContent =
-        lead.company ||
-        "Unnamed company";
+  if(!filter){
 
-      box.appendChild(
-        card
-      );
+    renderAll();
+
+    return;
+
+  }
+
+  var value =
+    filter.value;
+
+  var filtered =
+    leads.filter(function(item){
+
+      if(!value || value === "all"){
+
+        return true;
+
+      }
+
+      return String(item.status || "")
+        .toLowerCase() ===
+        value.toLowerCase();
+
+    });
+
+  renderLeads(filtered);
+
+}
+
+
+/* =========================
+   CLOSE LEAD MODAL
+========================= */
+
+function closeLeadModal(){
+
+  var modal =
+    document.getElementById("leadModal");
+
+  if(modal){
+
+    modal.classList.remove("show");
+
+    modal.style.display = "none";
+
+  }
+
+}
+
+
+/* =========================
+   ESC KEY
+========================= */
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(event.key === "Escape"){
+
+      closeLeadModal();
 
     }
-  );
-
-}
-
-
-/* =========================================================
-   DASHBOARD STATS
-========================================================= */
-
-function updateStats() {
-
-  const found =
-    document.getElementById(
-      "statFound"
-    );
-
-  const qualified =
-    document.getElementById(
-      "statQualified"
-    );
-
-  const contacted =
-    document.getElementById(
-      "statContacted"
-    );
-
-  const won =
-    document.getElementById(
-      "statWon"
-    );
-
-  if (found) {
-
-    found.textContent =
-      leads.length;
-
-  }
-
-  if (qualified) {
-
-    qualified.textContent =
-      leads.filter(
-        lead =>
-          Number(
-            lead.score
-          ) >= 80
-      ).length;
-
-  }
-
-  if (contacted) {
-
-    contacted.textContent =
-      leads.filter(
-        lead =>
-          String(
-            lead.status ||
-            ""
-          ).toUpperCase()
-          === "CONTACTED"
-      ).length;
-
-  }
-
-  if (won) {
-
-    won.textContent =
-      leads.filter(
-        lead =>
-          String(
-            lead.status ||
-            ""
-          ).toUpperCase()
-          === "WON"
-      ).length;
-
-  }
-
-}
-
-
-/* =========================================================
-   STARTUP
-========================================================= */
-
-async function startup() {
-
-  updateAccount();
-
-  try {
-
-    await loadAccount();
-
-    if (currentUser) {
-
-      await loadUsage();
-
-      await loadLeads();
-
-      await checkPaymentStatus();
-
-    }
-
-  } catch (error) {
-
-    console.error(
-      "Startup error:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   GLOBAL ERROR HANDLER
-========================================================= */
-
-window.addEventListener(
-  "unhandledrejection",
-  event => {
-
-    console.error(
-      "Unhandled error:",
-      event.reason
-    );
 
   }
 );
 
 
-/* =========================================================
-   START APPLICATION
-========================================================= */
+/* =========================
+   MODAL OUTSIDE CLICK
+========================= */
 
-startup();
+document.addEventListener(
+  "click",
+  function(event){
+
+    var modal =
+      document.getElementById("leadModal");
+
+    if(
+      modal &&
+      event.target === modal
+    ){
+
+      closeLeadModal();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   GLOBAL API
+========================= */
+
+window.addLead = addLead;
+window.editLead = editLead;
+window.deleteLead = deleteLead;
+window.closeLeadModal = closeLeadModal;
+window.searchLeads = searchLeads;
+window.filterLeads = filterLeads;
+
+
+/* =========================
+   INITIAL LOAD
+========================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    loadLeads();
+
+    renderAll();
+
+  }
+);
 
 </script>
 
 </body>
+
 </html>
