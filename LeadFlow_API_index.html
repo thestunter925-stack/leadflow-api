@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#070a12">
+<meta name="description" content="LeadFlow API — autonomous revenue intelligence and B2B lead generation command center.">
+<title>LeadFlow API — Revenue Intelligence</title>
+<style>
+:root{
+  --bg:#070a12;--bg2:#0b1020;--panel:rgba(15,22,38,.78);--panel2:#10192b;
+  --line:rgba(139,157,190,.16);--text:#edf4ff;--muted:#8491aa;--cyan:#42e8ff;
+  --violet:#9b7cff;--green:#50e3a4;--amber:#ffc857;--red:#ff6f91;
+  --shadow:0 18px 60px rgba(0,0,0,.34);--radius:18px;--sidebar:258px;
+  --font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:
+ radial-gradient(circle at 75% -10%,rgba(66,232,255,.08),transparent 32rem),
+ radial-gradient(circle at 10% 30%,rgba(155,124,255,.07),transparent 28rem),
+ var(--bg);color:var(--text);font-family:var(--font);min-height:100vh}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+.app{min-height:100vh}
+.sidebar{position:fixed;z-index:50;inset:0 auto 0 0;width:var(--sidebar);padding:18px 14px;
+ background:linear-gradient(180deg,rgba(10,15,28,.97),rgba(7,10,18,.98));border-right:1px solid var(--line);
+ display:flex;flex-direction:column;transform:translateX(0);transition:transform .25s ease}
+.brand{display:flex;align-items:center;gap:11px;padding:8px 10px 22px}
+.brand-mark{width:34px;height:34px;border-radius:11px;position:relative;background:linear-gradient(135deg,var(--cyan),var(--violet));
+ box-shadow:0 0 28px rgba(66,232,255,.25)}
+.brand-mark:before,.brand-mark:after{content:"";position:absolute;border:2px solid #07101b;border-radius:50%}
+.brand-mark:before{width:11px;height:11px;left:6px;top:10px}.brand-mark:after{width:11px;height:11px;right:6px;top:5px}
+.brand-title{font-weight:800;letter-spacing:-.03em}.brand-sub{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:.12em;text-transform:uppercase}
+.nav{display:grid;gap:4px;overflow:auto}
+.nav button{border:1px solid transparent;background:transparent;color:#9ba8bf;text-align:left;padding:10px 11px;border-radius:11px;
+ display:flex;align-items:center;gap:10px;font-size:13px;transition:.18s}
+.nav button:hover{background:rgba(255,255,255,.035);color:var(--text)}
+.nav button.active{background:linear-gradient(90deg,rgba(66,232,255,.10),rgba(155,124,255,.08));border-color:rgba(66,232,255,.12);color:#effbff}
+.nav-icon{width:20px;text-align:center;color:var(--cyan);font-size:13px}
+.side-bottom{margin-top:auto;padding:12px 8px 4px}.mode-chip{padding:11px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.025)}
+.mode-chip strong{font-size:10px;letter-spacing:.1em;color:var(--green)}.mode-chip p{font-size:11px;color:var(--muted);line-height:1.45;margin:6px 0 0}
+.main{margin-left:var(--sidebar);min-width:0}
+.topbar{height:68px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;
+ position:sticky;top:0;z-index:30;background:rgba(7,10,18,.78);backdrop-filter:blur(16px)}
+.mobile-menu{display:none;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:10px;padding:8px}
+.crumb{font-size:12px;color:var(--muted)}.crumb b{color:var(--text)}
+.top-actions{display:flex;align-items:center;gap:9px}.icon-btn,.avatar{border:1px solid var(--line);background:rgba(255,255,255,.03);color:#b8c4d8;border-radius:10px;width:36px;height:36px}
+.avatar{display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--cyan)}
+.content{padding:26px;max-width:1600px;margin:auto}
+.view{display:none;animation:fade .22s ease}.view.active{display:block}
+@keyframes fade{from{opacity:.2;transform:translateY(4px)}to{opacity:1;transform:none}}
+.hero{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;margin-bottom:22px}
+.eyebrow{font-size:10px;color:var(--cyan);letter-spacing:.18em;text-transform:uppercase;font-weight:800;margin-bottom:8px}
+h1{font-size:clamp(25px,4vw,38px);letter-spacing:-.045em;margin:0 0 7px}h2{font-size:18px;margin:0 0 5px;letter-spacing:-.025em}h3{font-size:14px;margin:0}
+.sub{color:var(--muted);font-size:13px;line-height:1.55}.hero-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.035);color:#dbe7f8;padding:10px 13px;font-size:12px;transition:.18s}
+.btn:hover{border-color:rgba(66,232,255,.3);transform:translateY(-1px)}.btn.primary{border-color:rgba(66,232,255,.3);background:linear-gradient(135deg,rgba(66,232,255,.17),rgba(155,124,255,.14));color:#eaffff}
+.btn.danger{color:#ff9ab2;border-color:rgba(255,111,145,.25)}
+.grid{display:grid;gap:14px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:14px}
+.card{background:linear-gradient(145deg,rgba(16,25,43,.86),rgba(10,16,29,.82));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:17px;position:relative;overflow:hidden}
+.card:after{content:"";position:absolute;inset:auto -20% -80% 35%;height:130px;background:radial-gradient(circle,rgba(66,232,255,.05),transparent 68%);pointer-events:none}
+.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.11em}.stat-value{font-size:27px;font-weight:800;letter-spacing:-.04em;margin:8px 0 4px}.stat-meta{font-size:11px;color:var(--green)}
+.cols-2{grid-template-columns:1.4fr 1fr}.cols-3{grid-template-columns:repeat(3,1fr)}
+.panel-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:15px}.panel-head .sub{font-size:11px}
+.radar{height:260px;display:grid;place-items:center;position:relative}.radar-ring{width:210px;height:210px;border:1px solid rgba(66,232,255,.24);border-radius:50%;position:relative;
+ background:repeating-radial-gradient(circle,transparent 0 31px,rgba(66,232,255,.06) 32px 33px),
+ linear-gradient(transparent 49.5%,rgba(66,232,255,.13) 50%,transparent 50.5%),
+ linear-gradient(90deg,transparent 49.5%,rgba(66,232,255,.13) 50%,transparent 50.5%)}
+.radar-ring:before{content:"";position:absolute;inset:15%;border-radius:50%;border:1px dashed rgba(155,124,255,.25)}
+.radar-sweep{position:absolute;width:50%;height:1px;top:50%;left:50%;transform-origin:left;animation:sweep 4s linear infinite;background:linear-gradient(90deg,rgba(66,232,255,.8),transparent)}
+@keyframes sweep{to{transform:rotate(360deg)}}.dot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 13px var(--cyan)}
+.d1{left:29%;top:31%}.d2{left:66%;top:37%;background:var(--violet);box-shadow:0 0 13px var(--violet)}.d3{left:58%;top:68%;background:var(--green);box-shadow:0 0 13px var(--green)}.d4{left:38%;top:61%;background:var(--amber);box-shadow:0 0 13px var(--amber)}
+.event-list{display:grid;gap:10px}.event{display:flex;gap:11px;padding:10px;border:1px solid rgba(139,157,190,.09);border-radius:12px;background:rgba(255,255,255,.018)}
+.event-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);margin-top:4px;box-shadow:0 0 10px rgba(66,232,255,.6);flex:none}.event p{margin:0;font-size:12px}.event small{display:block;color:var(--muted);margin-top:3px;font-size:10px}
+.telemetry{display:grid;gap:10px}.tele-row{display:grid;grid-template-columns:105px 1fr 45px;gap:9px;align-items:center;font-size:11px;color:#aab6c9}.bar{height:5px;border-radius:10px;background:#151e30;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--violet));border-radius:inherit}
+.signal{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px;border-bottom:1px solid var(--line)}.signal:last-child{border-bottom:0}.signal-left{min-width:0}.signal-title{font-size:12px;font-weight:700}.signal-company{font-size:10px;color:var(--muted);margin-top:3px}.pill{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:999px;padding:4px 7px;font-size:9px;color:#b9c5d7;white-space:nowrap}.pill.good{color:var(--green);border-color:rgba(80,227,164,.22)}.pill.warn{color:var(--amber);border-color:rgba(255,200,87,.22)}.pill.hot{color:var(--cyan);border-color:rgba(66,232,255,.25)}
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.field{display:grid;gap:6px}.field label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.field input,.field select,.field textarea{
+ width:100%;border:1px solid var(--line);background:#0a1120;color:var(--text);border-radius:10px;padding:10px 11px;outline:none;font-size:12px}
+.field textarea{min-height:110px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(66,232,255,.42);box-shadow:0 0 0 3px rgba(66,232,255,.05)}
+.full{grid-column:1/-1}.form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:13px}
+.results{margin-top:14px;display:grid;gap:9px}.lead-result{display:grid;grid-template-columns:1.7fr .7fr .7fr 1.1fr auto;align-items:center;gap:14px;padding:13px;border:1px solid var(--line);background:rgba(255,255,255,.018);border-radius:13px}
+.company-name{font-weight:750;font-size:13px}.company-meta{font-size:10px;color:var(--muted);margin-top:4px}.score{font-size:18px;font-weight:800}.score small{display:block;font-size:9px;color:var(--muted);font-weight:500}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}.data-table{width:100%;border-collapse:collapse;min-width:920px}.data-table th,.data-table td{padding:11px 12px;text-align:left;border-bottom:1px solid rgba(139,157,190,.1);font-size:11px;white-space:nowrap}.data-table th{color:#7f8da5;font-size:9px;text-transform:uppercase;letter-spacing:.1em;background:rgba(255,255,255,.02)}.data-table tr:hover td{background:rgba(66,232,255,.025)}.toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:11px;flex-wrap:wrap}.toolbar-left,.toolbar-right{display:flex;gap:7px;flex-wrap:wrap}.mini-input{border:1px solid var(--line);background:#0a1120;color:var(--text);border-radius:9px;padding:9px 10px;font-size:11px;min-width:190px}.select{border:1px solid var(--line);background:#0a1120;color:var(--text);border-radius:9px;padding:9px 10px;font-size:11px}
+.pipeline{display:grid;grid-template-columns:repeat(7,minmax(180px,1fr));gap:10px;overflow:auto;padding-bottom:8px}.stage{min-height:330px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.018);padding:10px}.stage-head{display:flex;justify-content:space-between;margin-bottom:10px}.stage-title{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#9aa8be}.stage-count{font-size:9px;color:var(--muted)}.deal{padding:11px;border:1px solid var(--line);border-radius:11px;background:#0c1423;margin-bottom:8px}.deal strong{font-size:11px}.deal-meta{font-size:9px;color:var(--muted);margin:6px 0}.deal-value{font-size:12px;font-weight:800}.deal-signal{font-size:9px;color:var(--cyan);margin-top:5px}
+.workflow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.workflow .card{min-height:190px}.wf-top{display:flex;justify-content:space-between;align-items:center}.toggle{width:38px;height:21px;border-radius:99px;border:1px solid var(--line);background:#151e30;padding:2px}.toggle i{display:block;width:15px;height:15px;border-radius:50%;background:#647086;transition:.2s}.toggle.on{background:rgba(66,232,255,.16);border-color:rgba(66,232,255,.3)}.toggle.on i{transform:translateX(15px);background:var(--cyan);box-shadow:0 0 10px rgba(66,232,255,.55)}.wf-flow{display:grid;gap:7px;margin:17px 0}.wf-node{font-size:10px;padding:8px;border:1px solid var(--line);border-radius:8px;color:#aebbd0}.wf-node b{color:var(--cyan);font-size:8px;text-transform:uppercase;margin-right:6px}.wf-footer{display:flex;justify-content:space-between;color:var(--muted);font-size:9px}
+.funnel{display:grid;gap:9px}.funnel-row{display:grid;grid-template-columns:120px 1fr 45px;align-items:center;gap:10px;font-size:10px}.funnel-bar{height:18px;background:#111a2b;border-radius:6px;overflow:hidden}.funnel-bar i{display:block;height:100%;background:linear-gradient(90deg,rgba(66,232,255,.7),rgba(155,124,255,.65))}
+.sparkline{height:120px;display:flex;align-items:end;gap:5px}.sparkline i{display:block;flex:1;max-width:12px;background:linear-gradient(180deg,var(--cyan),rgba(66,232,255,.08));border-radius:4px 4px 0 0;min-height:12px}
+.dist{display:grid;gap:8px}.dist-row{display:grid;grid-template-columns:100px 1fr 40px;gap:8px;align-items:center;font-size:10px}.api-console{display:grid;grid-template-columns:.9fr 1.1fr;gap:12px}.endpoint-list{display:grid;gap:6px;max-height:420px;overflow:auto}.endpoint{padding:10px;border:1px solid var(--line);background:rgba(255,255,255,.015);border-radius:10px;text-align:left;color:#bac6d9}.endpoint.active{border-color:rgba(66,232,255,.32);background:rgba(66,232,255,.05)}.method{font-size:8px;font-weight:800;margin-right:7px;color:var(--green)}.endpoint-path{font-family:ui-monospace,monospace;font-size:10px}.console-response{min-height:260px;background:#060b14;border:1px solid var(--line);border-radius:10px;padding:12px;color:#a9dff0;font:11px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;overflow:auto;white-space:pre-wrap}
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.plan{min-height:310px}.plan.featured{border-color:rgba(66,232,255,.3);box-shadow:0 0 40px rgba(66,232,255,.06),var(--shadow)}.plan-name{font-size:10px;letter-spacing:.13em;color:var(--cyan);font-weight:800}.price{font-size:32px;font-weight:850;margin:12px 0}.price span{font-size:11px;color:var(--muted);font-weight:500}.features{display:grid;gap:9px;margin:18px 0}.features div{font-size:11px;color:#aebbd0}.features div:before{content:"✓";color:var(--green);margin-right:8px}.usage{display:grid;gap:12px}.usage-item{display:grid;gap:5px}.usage-head{display:flex;justify-content:space-between;font-size:10px;color:#aebbd0}.settings-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:13px}.status-box{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.018)}.status-light{width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 10px rgba(255,111,145,.5)}.status-light.ok{background:var(--green);box-shadow:0 0 10px rgba(80,227,164,.5)}.toast{position:fixed;right:18px;bottom:18px;z-index:100;max-width:min(360px,calc(100vw - 36px));padding:12px 14px;border:1px solid rgba(66,232,255,.25);background:#0d1626;color:#dcecff;border-radius:11px;box-shadow:var(--shadow);font-size:11px;transform:translateY(130%);transition:.25s}.toast.show{transform:none}.drawer-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:45}.empty{padding:30px;text-align:center;color:var(--muted);font-size:12px}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}.cols-2,.settings-grid{grid-template-columns:1fr}.workflow{grid-template-columns:repeat(2,1fr)}.plan-grid{grid-template-columns:1fr}.api-console{grid-template-columns:1fr}}
+@media(max-width:760px){
+ :root{--sidebar:280px}.sidebar{transform:translateX(-102%);box-shadow:20px 0 70px rgba(0,0,0,.55)}.sidebar.open{transform:none}.drawer-backdrop.open{display:block}.main{margin-left:0}.topbar{padding:0 15px;height:60px}.mobile-menu{display:block}.crumb{display:none}.content{padding:18px 14px 28px}.hero{align-items:flex-start;flex-direction:column}.stats{grid-template-columns:1fr 1fr;gap:9px}.card{padding:14px}.stat-value{font-size:22px}.form-grid{grid-template-columns:1fr}.workflow{grid-template-columns:1fr}.lead-result{grid-template-columns:1fr 1fr;gap:10px}.lead-result .result-company{grid-column:1/-1}.pipeline{grid-template-columns:repeat(7,185px)}.cols-3{grid-template-columns:1fr}.top-actions .icon-btn{display:none}.api-console{grid-template-columns:1fr}.plan-grid{grid-template-columns:1fr}.toolbar{align-items:stretch}.mini-input{min-width:0;width:100%}.toolbar-left{width:100%}}
+@media(max-width:390px){.stats{grid-template-columns:1fr}.lead-result{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><div class="brand-mark"></div><div><div class="brand-title">LeadFlow API</div><div class="brand-sub">Revenue Intelligence</div></div></div>
+    <nav class="nav" aria-label="Main navigation">
+      <button class="active" data-view="overview"><span class="nav-icon">◈</span>Overview</button>
+      <button data-view="discovery"><span class="nav-icon">⌁</span>Lead Discovery</button>
+      <button data-view="universe"><span class="nav-icon">◫</span>Lead Universe</button>
+      <button data-view="pipeline"><span class="nav-icon">◒</span>Revenue Pipeline</button>
+      <button data-view="automation"><span class="nav-icon">⟐</span>Automation</button>
+      <button data-view="signals"><span class="nav-icon">◉</span>Buying Signals</button>
+      <button data-view="analytics"><span class="nav-icon">⌁</span>Analytics</button>
+      <button data-view="console"><span class="nav-icon">▣</span>API Console</button>
+      <button data-view="plans"><span class="nav-icon">◇</span>Plans &amp; Usage</button>
+      <button data-view="settings"><span class="nav-icon">⚙</span>Settings</button>
+    </nav>
+    <div class="side-bottom"><div class="mode-chip"><strong id="modeLabel">DEMO MODE</strong><p id="modeDescription">Connect a backend API in Settings to activate live intelligence.</p></div></div>
+  </aside>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <main class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:10px"><button class="mobile-menu" id="mobileMenu" aria-label="Open navigation">☰</button><div class="crumb">Command Center / <b id="crumbTitle">Overview</b></div></div>
+      <div class="top-actions"><button class="icon-btn" id="healthTop" title="Check API health">⌁</button><div class="avatar">LF</div></div>
+    </header>
+    <div class="content">
+
+      <section class="view active" id="view-overview">
+        <div class="hero"><div><div class="eyebrow">Autonomous revenue layer</div><h1>Revenue Intelligence Command Center</h1><div class="sub">Discover demand, identify intent, and turn market signals into qualified revenue opportunities.</div></div><div class="hero-actions"><button class="btn primary" data-go="discovery">+ Discover Leads</button><button class="btn" id="refreshOverview">Refresh intelligence</button></div></div>
+        <div class="grid stats">
+          <div class="card"><div class="stat-label">Lead Universe</div><div class="stat-value" id="statUniverse">12,840</div><div class="stat-meta">↑ 18.4% this month</div></div>
+          <div class="card"><div class="stat-label">Qualified Leads</div><div class="stat-value" id="statQualified">2,146</div><div class="stat-meta">↑ 9.7% qualification rate</div></div>
+          <div class="card"><div class="stat-label">Pipeline Value</div><div class="stat-value" id="statPipeline">₹84.6L</div><div class="stat-meta">↑ 14.2% weighted growth</div></div>
+          <div class="card"><div class="stat-label">Conversion Rate</div><div class="stat-value" id="statConversion">8.7%</div><div class="stat-meta">↑ 1.3 pts vs last period</div></div>
+        </div>
+        <div class="grid cols-2">
+          <div class="card"><div class="panel-head"><div><h2>Revenue Radar</h2><div class="sub">Live concentration of high-intent accounts across your universe.</div></div><span class="pill hot">LIVE SCAN</span></div><div class="radar"><div class="radar-ring"><div class="radar-sweep"></div><i class="dot d1"></i><i class="dot d2"></i><i class="dot d3"></i><i class="dot d4"></i></div></div></div>
+          <div class="card"><div class="panel-head"><div><h2>High-intent prospects</h2><div class="sub">Accounts requiring attention now.</div></div><button class="btn" data-go="universe">View all</button></div><div id="highIntentList"></div></div>
+        </div>
+        <div class="grid cols-3" style="margin-top:14px">
+          <div class="card"><div class="panel-head"><div><h2>System Telemetry</h2><div class="sub">Last 24 hours</div></div></div><div class="telemetry"><div class="tele-row"><span>Discovery</span><div class="bar"><i style="width:82%"></i></div><b>82%</b></div><div class="tele-row"><span>Enrichment</span><div class="bar"><i style="width:71%"></i></div><b>71%</b></div><div class="tele-row"><span>Signals</span><div class="bar"><i style="width:91%"></i></div><b>91%</b></div><div class="tele-row"><span>API</span><div class="bar"><i style="width:99%"></i></div><b>99%</b></div></div></div>
+          <div class="card"><div class="panel-head"><div><h2>API Health</h2><div class="sub">Authenticated service connection</div></div></div><div class="status-box"><span class="status-light" id="healthLight"></span><div><strong id="healthText">Demo fallback active</strong><div class="sub" id="healthSub">No backend URL configured</div></div></div><div style="margin-top:12px"><button class="btn" id="healthCheck">Run health check</button></div></div>
+          <div class="card"><div class="panel-head"><div><h2>Discovery Activity</h2><div class="sub">Current cycle throughput</div></div><span class="pill good">+24%</span></div><div class="sparkline" id="discoverySpark"></div></div>
+        </div>
+        <div class="card" style="margin-top:14px"><div class="panel-head"><div><h2>Recent Intelligence Events</h2><div class="sub">Signals detected by the revenue engine.</div></div></div><div class="event-list" id="eventList"></div></div>
+      </section>
+
+      <section class="view" id="view-discovery">
+        <div class="hero"><div><div class="eyebrow">Market intelligence</div><h1>Lead Discovery</h1><div class="sub">Describe your ideal account. LeadFlow converts the brief into a scored prospect set.</div></div></div>
+        <div class="card">
+          <div class="form-grid">
+            <div class="field full"><label>Natural-language ICP</label><textarea id="icpInput">Indian B2B SaaS companies with 20–200 employees that are hiring sales and marketing teams.</textarea></div>
+            <div class="field"><label>Industry</label><select id="industryFilter"><option>Any industry</option><option>B2B SaaS</option><option>FinTech</option><option>AI / ML</option><option>Cybersecurity</option><option>Marketing Technology</option></select></div>
+            <div class="field"><label>Company size</label><select id="sizeFilter"><option>20–200</option><option>11–50</option><option>51–200</option><option>201–500</option><option>500+</option></select></div>
+            <div class="field"><label>Location</label><input id="locationFilter" value="India" placeholder="e.g. India, Bengaluru"></div>
+            <div class="field"><label>Revenue</label><select id="revenueFilter"><option>Any revenue</option><option>₹1Cr–₹10Cr</option><option>₹10Cr–₹50Cr</option><option>₹50Cr+</option></select></div>
+            <div class="field"><label>Technology</label><input id="technologyFilter" placeholder="e.g. HubSpot, Salesforce"></div>
+            <div class="field"><label>Intent threshold</label><select id="intentFilter"><option>70+</option><option>80+</option><option>90+</option><option>60+</option></select></div>
+            <div class="field"><label>Employee range</label><input id="employeeFilter" value="20-200" placeholder="20-200"></div>
+          </div>
+          <div class="form-actions"><button class="btn" id="clearDiscovery">Reset</button><button class="btn primary" id="discoverBtn">Run intelligence scan</button></div>
+        </div>
+        <div class="results" id="discoveryResults"></div>
+      </section>
+
+      <section class="view" id="view-universe">
+        <div class="hero"><div><div class="eyebrow">Account intelligence</div><h1>Lead Universe</h1><div class="sub">Your continuously scored market universe.</div></div><div class="hero-actions"><button class="btn" id="exportJson">Export JSON</button><button class="btn primary" data-go="discovery">+ Add accounts</button></div></div>
+        <div class="card"><div class="toolbar"><div class="toolbar-left"><input class="mini-input" id="universeSearch" placeholder="Search company, industry, signal..."><select class="select" id="statusFilter"><option>All statuses</option><option>New</option><option>Qualified</option><option>Contacted</option><option>Engaged</option><option>Opportunity</option><option>Won</option><option>Lost</option></select></div><div class="toolbar-right"><span class="pill" id="universeCount">0 accounts</span></div></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Company</th><th>Industry</th><th>Location</th><th>Employees</th><th>Revenue</th><th>Intent</th><th>Fit</th><th>Signal</th><th>Status</th><th>Owner</th><th>Last activity</th><th></th></tr></thead><tbody id="universeBody"></tbody></table></div></div>
+      </section>
+
+      <section class="view" id="view-pipeline">
+        <div class="hero"><div><div class="eyebrow">Revenue operations</div><h1>Revenue Pipeline</h1><div class="sub">Move high-intent accounts from signal to revenue.</div></div><div class="hero-actions"><button class="btn primary" id="pipelineRefresh">Recalculate forecast</button></div></div>
+        <div class="grid stats"><div class="card"><div class="stat-label">Open Opportunities</div><div class="stat-value">42</div><div class="stat-meta">₹51.8L active value</div></div><div class="card"><div class="stat-label">Weighted Forecast</div><div class="stat-value">₹31.4L</div><div class="stat-meta">68% confidence</div></div><div class="card"><div class="stat-label">Expected Close</div><div class="stat-value">23</div><div class="stat-meta">accounts this quarter</div></div><div class="card"><div class="stat-label">Win Rate</div><div class="stat-value">24.8%</div><div class="stat-meta">+4.2 pts</div></div></div>
+        <div class="pipeline" id="pipelineBoard"></div>
+      </section>
+
+      <section class="view" id="view-automation">
+        <div class="hero"><div><div class="eyebrow">Autonomous workflows</div><h1>Automation</h1><div class="sub">Turn revenue signals into deterministic actions without manual routing.</div></div><button class="btn primary" id="newWorkflow">+ New workflow</button></div>
+        <div class="workflow" id="workflowGrid"></div>
+      </section>
+
+      <section class="view" id="view-signals">
+        <div class="hero"><div><div class="eyebrow">Intent graph</div><h1>Buying Signals</h1><div class="sub">Behavioral and firmographic events ranked by revenue relevance.</div></div><button class="btn" id="refreshSignals">Rescan signals</button></div>
+        <div class="card"><div class="toolbar"><div class="toolbar-left"><input class="mini-input" id="signalSearch" placeholder="Filter signals..."></div><div class="toolbar-right"><span class="pill hot">Signal engine online</span></div></div><div id="signalsList"></div></div>
+      </section>
+
+      <section class="view" id="view-analytics">
+        <div class="hero"><div><div class="eyebrow">Performance layer</div><h1>Analytics</h1><div class="sub">Understand which intelligence motions are creating qualified revenue.</div></div></div>
+        <div class="grid cols-2"><div class="card"><div class="panel-head"><div><h2>Discovery efficiency</h2><div class="sub">Qualified accounts per discovery cycle</div></div><span class="pill good">+18.4%</span></div><div class="sparkline" id="analyticsSpark"></div></div><div class="card"><div class="panel-head"><div><h2>Average intent</h2><div class="sub">Universe-wide score</div></div><strong style="font-size:25px">76.4</strong></div><div class="bar" style="height:12px;margin:22px 0"><i style="width:76.4%"></i></div><div class="sub">Top decile: 93.1 intent</div></div></div>
+        <div class="grid cols-2" style="margin-top:14px"><div class="card"><div class="panel-head"><div><h2>Qualification funnel</h2><div class="sub">Current cohort</div></div></div><div class="funnel"><div class="funnel-row"><span>Discovered</span><div class="funnel-bar"><i style="width:100%"></i></div><b>12,840</b></div><div class="funnel-row"><span>Enriched</span><div class="funnel-bar"><i style="width:72%"></i></div><b>9,245</b></div><div class="funnel-row"><span>Qualified</span><div class="funnel-bar"><i style="width:35%"></i></div><b>4,491</b></div><div class="funnel-row"><span>Intent+</span><div class="funnel-bar"><i style="width:17%"></i></div><b>2,146</b></div></div></div><div class="card"><div class="panel-head"><div><h2>Signal distribution</h2><div class="sub">Detected events</div></div></div><div class="dist"><div class="dist-row"><span>Hiring growth</span><div class="bar"><i style="width:84%"></i></div><b>84%</b></div><div class="dist-row"><span>Funding</span><div class="bar"><i style="width:61%"></i></div><b>61%</b></div><div class="dist-row"><span>Tech change</span><div class="bar"><i style="width:48%"></i></div><b>48%</b></div><div class="dist-row"><span>Expansion</span><div class="bar"><i style="width:37%"></i></div><b>37%</b></div><div class="dist-row"><span>Leadership</span><div class="bar"><i style="width:29%"></i></div><b>29%</b></div></div></div></div>
+        <div class="card" style="margin-top:14px"><div class="panel-head"><div><h2>Intelligence event stream</h2><div class="sub">Machine-ranked activity across the system</div></div></div><div class="event-list" id="analyticsEvents"></div></div>
+      </section>
+
+      <section class="view" id="view-console">
+        <div class="hero"><div><div class="eyebrow">Developer surface</div><h1>API Console</h1><div class="sub">Inspect and test the LeadFlow API using your configured backend session.</div></div></div>
+        <div class="api-console"><div class="card"><div class="panel-head"><div><h2>Endpoints</h2><div class="sub">Backend routes available where implemented.</div></div></div><div class="endpoint-list" id="endpointList"></div></div><div class="card"><div class="panel-head"><div><h2 id="consoleTitle">GET /api/health</h2><div class="sub" id="consoleMeta">No request sent</div></div><span class="pill" id="consoleStatus">READY</span></div><div class="field"><label>Request body</label><textarea id="requestBody">{}</textarea></div><div class="form-actions" style="margin-bottom:11px"><button class="btn primary" id="sendRequest">Send Request</button></div><div class="field"><label>Response</label><div class="console-response" id="responseViewer">{ "mode": "demo", "message": "Configure a backend URL in Settings to send live requests." }</div></div></div></div>
+      </section>
+
+      <section class="view" id="view-plans">
+        <div class="hero"><div><div class="eyebrow">Capacity &amp; access</div><h1>Plans &amp; Usage</h1><div class="sub">Usage is informational here; entitlements must be enforced by the LeadFlow backend.</div></div></div>
+        <div class="plan-grid"><div class="card plan"><div class="plan-name">FREE / EXPLORER</div><div class="price">₹0 <span>/ month</span></div><div class="features"><div>250 leads discovered</div><div>100 enrichments</div><div>500 API calls</div><div>25 automation executions</div></div><button class="btn" style="width:100%" id="explorerActive">Current plan</button></div><div class="card plan featured"><div class="plan-name">PRO / REVENUE ENGINE</div><div class="price">₹499 <span>/ month</span></div><div class="features"><div>5,000 leads discovered</div><div>2,500 enrichments</div><div>10,000 API calls</div><div>1,000 automation executions</div></div><button class="btn primary" style="width:100%" id="upgradePro">Upgrade via backend</button></div><div class="card plan"><div class="plan-name">ENTERPRISE / SCALE</div><div class="price">Custom</div><div class="features"><div>Custom lead universe</div><div>Priority enrichment</div><div>Dedicated API capacity</div><div>Enterprise controls</div></div><button class="btn" style="width:100%" id="contactEnterprise">Request enterprise plan</button></div></div>
+        <div class="card" style="margin-top:14px"><div class="panel-head"><div><h2>Monthly usage</h2><div class="sub" id="usagePlanLabel">Explorer plan — demo usage</div></div></div><div class="usage" id="usageBars"></div></div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="hero"><div><div class="eyebrow">Control plane</div><h1>Settings</h1><div class="sub">Configure the public backend origin used by this frontend. Never place secrets here.</div></div></div>
+        <div class="settings-grid"><div class="card"><div class="panel-head"><div><h2>Backend connection</h2><div class="sub">Only the API origin is stored in this browser session.</div></div></div><div class="field"><label>Backend API URL</label><input id="apiBaseInput" type="url" placeholder="https://api.example.com"></div><div class="form-actions"><button class="btn" id="clearApiBase">Use demo mode</button><button class="btn primary" id="saveApiBase">Save &amp; test connection</button></div><div style="margin-top:14px" class="status-box"><span class="status-light" id="settingsHealthLight"></span><div><strong id="settingsHealthText">Demo mode</strong><div class="sub" id="settingsHealthSub">No backend URL configured.</div></div></div></div>
+          <div class="card"><div class="panel-head"><div><h2>Account</h2><div class="sub">Identity is resolved by the backend session.</div></div></div><div class="field"><label>Account email</label><input id="accountEmail" type="email" placeholder="Not loaded"></div><div class="form-actions"><button class="btn" id="loadProfile">Load profile</button><button class="btn danger" id="logoutBtn">Logout</button></div><div style="margin-top:15px" class="sub">Security note: frontend code contains no private API keys, service-role keys, database passwords, payment secrets, or JWT signing secrets.</div></div></div>
+        <div class="card" style="margin-top:14px"><div class="panel-head"><div><h2>Application preferences</h2><div class="sub">Lightweight preferences for the command center.</div></div></div><div class="status-box"><input type="checkbox" id="telemetryPref" checked><div><strong>Live telemetry animation</strong><div class="sub">Keep radar and telemetry visuals active while the dashboard is open.</div></div></div></div>
+      </section>
+
+    </div>
+  </main>
+  <div class="toast" id="toast"></div>
+</div>
+<script>
+(() => {
+  "use strict";
+
+  const state = {
+    apiBase: "",
+    demo: true,
+    currentEndpoint: {method:"GET", path:"/api/health"},
+    leads: [
+      {id:1,company:"OrbitStack",industry:"B2B SaaS",location:"Bengaluru, India",employees:86,revenue:"₹10Cr–₹50Cr",intent:94,fit:91,signal:"Hiring growth",status:"Qualified",owner:"Unassigned",activity:"12 min ago"},
+      {id:2,company:"NexaCloud",industry:"B2B SaaS",location:"Hyderabad, India",employees:142,revenue:"₹10Cr–₹50Cr",intent:89,fit:88,signal:"Funding",status:"New",owner:"Unassigned",activity:"38 min ago"},
+      {id:3,company:"FinPilot",industry:"FinTech",location:"Mumbai, India",employees:64,revenue:"₹1Cr–₹10Cr",intent:86,fit:84,signal:"Leadership",status:"Contacted",owner:"A. Shah",activity:"1 hr ago"},
+      {id:4,company:"VectorAI",industry:"AI / ML",location:"Pune, India",employees:118,revenue:"₹10Cr–₹50Cr",intent:82,fit:93,signal:"Technology change",status:"Engaged",owner:"R. Khan",activity:"2 hrs ago"},
+      {id:5,company:"MarketPulse",industry:"Marketing Technology",location:"Delhi-NCR, India",employees:37,revenue:"₹1Cr–₹10Cr",intent:79,fit:81,signal:"Demand spike",status:"New",owner:"Unassigned",activity:"3 hrs ago"},
+      {id:6,company:"ShieldLayer",industry:"Cybersecurity",location:"Chennai, India",employees:191,revenue:"₹50Cr+",intent:76,fit:87,signal:"Expansion",status:"Opportunity",owner:"S. Rao",activity:"5 hrs ago"}
+    ],
+    discovery: [
+      {id:101,company:"SignalForge",industry:"B2B SaaS",location:"Bengaluru, India",employees:74,revenue:"₹10Cr–₹50Cr",intent:96,fit:94,signal:"Hiring growth"},
+      {id:102,company:"RevMesh",industry:"B2B SaaS",location:"Hyderabad, India",employees:128,revenue:"₹10Cr–₹50Cr",intent:92,fit:89,signal:"Funding"},
+      {id:103,company:"DataHarbor",industry:"AI / ML",location:"Pune, India",employees:52,revenue:"₹1Cr–₹10Cr",intent:87,fit:92,signal:"Technology change"},
+      {id:104,company:"CloudMint",industry:"B2B SaaS",location:"Mumbai, India",employees:196,revenue:"₹50Cr+",intent:83,fit:86,signal:"Expansion"}
+    ],
+    signals: [
+      {company:"OrbitStack",signal:"Hiring growth",strength:96,time:"12 min ago",action:"Trigger high-intent outreach"},
+      {company:"NexaCloud",signal:"Funding",strength:91,time:"38 min ago",action:"Prioritize account enrichment"},
+      {company:"FinPilot",signal:"New leadership",strength:87,time:"1 hr ago",action:"Map new decision makers"},
+      {company:"VectorAI",signal:"Technology change",strength:84,time:"2 hrs ago",action:"Review stack-specific pitch"},
+      {company:"MarketPulse",signal:"Demand spike",strength:81,time:"3 hrs ago",action:"Launch opportunity workflow"},
+      {company:"ShieldLayer",signal:"Expansion",strength:78,time:"5 hrs ago",action:"Route to enterprise owner"}
+    ],
+    events: [
+      ["Hiring signal detected","OrbitStack added 7 sales roles across India.","12 min ago"],
+      ["Funding event enriched","NexaCloud matched with a new growth-stage financing event.","38 min ago"],
+      ["Technology change","VectorAI moved part of its customer stack to a new cloud provider.","2 hrs ago"],
+      ["Opportunity escalated","ShieldLayer crossed the 75 intent threshold and entered pipeline.","5 hrs ago"]
+    ],
+    workflows: [
+      {id:1,name:"High Intent Alert",trigger:"Intent score ≥ 90",action:"Notify revenue owner",executions:184,last:"8 min ago",on:true},
+      {id:2,name:"New Lead Enrichment",trigger:"New lead created",action:"Run company + contact enrichment",executions:1264,last:"2 min ago",on:true},
+      {id:3,name:"Funding Signal Trigger",trigger:"Funding event detected",action:"Enrich + assign to SDR",executions:48,last:"38 min ago",on:true},
+      {id:4,name:"Hiring Signal Trigger",trigger:"Hiring growth detected",action:"Increase intent + route",executions:217,last:"12 min ago",on:true},
+      {id:5,name:"Stale Lead Reactivation",trigger:"No activity for 14 days",action:"Create reactivation task",executions:92,last:"Yesterday",on:false},
+      {id:6,name:"Opportunity Follow-up",trigger:"Opportunity stage + 3 days",action:"Create follow-up task",executions:63,last:"4 hrs ago",on:true}
+    ],
+    pipeline: {
+      "New":[["MarketPulse","₹2.4L",31,"Demand spike"],["NexaCloud","₹4.1L",42,"Funding"]],
+      "Qualified":[["OrbitStack","₹5.8L",61,"Hiring growth"],["DataHarbor","₹3.2L",54,"Tech change"]],
+      "Contacted":[["FinPilot","₹2.7L",45,"Leadership"]],
+      "Engaged":[["VectorAI","₹6.2L",68,"Technology change"]],
+      "Opportunity":[["ShieldLayer","₹8.5L",76,"Expansion"],["CloudMint","₹4.6L",71,"Expansion"]],
+      "Won":[["CoreOps","₹3.8L",100,"Product launch"]],
+      "Lost":[["OldSignal","₹1.2L",0,"Stale signal"]]
+    }
+  };
+
+  const $ = id => document.getElementById(id);
+  const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+  const toast = (message) => { const el=$("toast"); el.textContent=message; el.classList.add("show"); clearTimeout(toast.timer); toast.timer=setTimeout(()=>el.classList.remove("show"),2600); };
+
+  function normalizeBase(url){
+    return String(url || "").trim().replace(/\/+$/,"");
+  }
+
+  function loadRuntimeBase(){
+    // Intentionally session-scoped: this is a non-secret public API origin, never a credential.
+    try { state.apiBase = normalizeBase(window.sessionStorage.getItem("leadflow_api_base") || ""); } catch(e){ state.apiBase=""; }
+    state.demo = !state.apiBase;
+  }
+
+  async function api(path, options = {}){
+    const endpoint = path.startsWith("/") ? path : "/" + path;
+    if(!state.apiBase){
+      return {ok:true,demo:true,data:demoResponse(endpoint,options.method || "GET"),status:200,responseTime:0};
+    }
+    const started = performance.now();
+    const config = {
+      method: options.method || "GET",
+      credentials: "include",
+      headers: {"Accept":"application/json",...(options.headers || {})}
+    };
+    if(options.body !== undefined){
+      config.headers["Content-Type"]="application/json";
+      config.body=typeof options.body==="string" ? options.body : JSON.stringify(options.body);
+    }
+    try{
+      const response = await fetch(state.apiBase + endpoint, config);
+      const responseTime = Math.round(performance.now()-started);
+      const text = await response.text();
+      let data;
+      try{ data=text ? JSON.parse(text) : {}; }catch(e){ data={raw:text}; }
+      if(response.status === 401 || response.status === 403) throw new Error("Authentication required or access denied.");
+      if(!response.ok){
+        const message = data?.message || data?.error || ("Request failed with HTTP " + response.status);
+        const error = new Error(message); error.status=response.status; throw error;
+      }
+      return {ok:true,demo:false,data,status:response.status,responseTime};
+    }catch(error){
+      error.responseTime=Math.round(performance.now()-started);
+      throw error;
+    }
+  }
+
+  function demoResponse(path, method){
+    const responses={
+      "/api/health":{status:"ok",service:"LeadFlow API",mode:"demo",timestamp:new Date().toISOString()},
+      "/api/me":{id:"demo-user",email:"demo@leadflow.local",plan:"EXPLORER",authenticated:false},
+      "/api/leads":{items:state.leads,total:state.leads.length},
+      "/api/usage":{plan:"EXPLORER",leads_discovered:184,enrichments:72,api_calls:218,automation_executions:19},
+      "/api/clients/search":{items:state.discovery,total:state.discovery.length,mode:"demo"},
+      "/api/payment/create":{ok:false,message:"Demo mode: payment creation is disabled. Configure a backend to process payments securely."},
+      "/api/auth/logout":{ok:true,message:"Demo session cleared."}
+    };
+    return responses[path] || {ok:true,method,path,mode:"demo"};
+  }
+
+  function showView(name){
+    document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id==="view-"+name));
+    document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===name));
+    const active=document.querySelector('.nav button.active');
+    $("crumbTitle").textContent=active ? active.textContent.trim() : "Overview";
+    $("sidebar").classList.remove("open"); $("drawerBackdrop").classList.remove("open");
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  function renderEvents(targetId, events=state.events){
+    $(targetId).innerHTML=events.map(e=>`<div class="event"><i class="event-dot"></i><div><p><b>${escapeHtml(e[0])}</b> — ${escapeHtml(e[1])}</p><small>${escapeHtml(e[2])}</small></div></div>`).join("");
+  }
+
+  function renderHighIntent(){
+    $("highIntentList").innerHTML=state.leads.filter(l=>l.intent>=80).slice(0,4).map(l=>`<div class="signal"><div class="signal-left"><div class="signal-title">${escapeHtml(l.company)}</div><div class="signal-company">${escapeHtml(l.signal)} · ${escapeHtml(l.location)}</div></div><span class="pill hot">${l.intent} intent</span></div>`).join("");
+  }
+
+  function renderSpark(id, values=[42,57,48,70,64,82,68,91,77,96,88,100]){
+    $(id).innerHTML=values.map(v=>`<i style="height:${v}%"></i>`).join("");
+  }
+
+  function renderUniverse(){
+    const q=$("universeSearch").value.trim().toLowerCase(), status=$("statusFilter").value;
+    const rows=state.leads.filter(l=>(!q || [l.company,l.industry,l.location,l.signal,l.owner].join(" ").toLowerCase().includes(q)) && (status==="All statuses" || l.status===status));
+    $("universeCount").textContent=rows.length+" accounts";
+    $("universeBody").innerHTML=rows.length ? rows.map(l=>`<tr>
+      <td><b>${escapeHtml(l.company)}</b></td><td>${escapeHtml(l.industry)}</td><td>${escapeHtml(l.location)}</td><td>${l.employees}</td><td>${escapeHtml(l.revenue)}</td>
+      <td><span class="pill ${l.intent>=90?"hot":l.intent>=75?"good":""}">${l.intent}</span></td><td>${l.fit}</td><td>${escapeHtml(l.signal)}</td>
+      <td><select class="select status-select" data-id="${l.id}" aria-label="Status for ${escapeHtml(l.company)}">${["New","Qualified","Contacted","Engaged","Opportunity","Won","Lost"].map(s=>`<option ${s===l.status?"selected":""}>${s}</option>`).join("")}</select></td>
+      <td>${escapeHtml(l.owner)}</td><td>${escapeHtml(l.activity)}</td><td><button class="btn details-btn" data-id="${l.id}">Details</button></td>
+    </tr>`).join("") : `<tr><td colspan="12"><div class="empty">No accounts match the current filters.</div></td></tr>`;
+  }
+
+  function renderDiscovery(items=state.discovery){
+    $("discoveryResults").innerHTML=items.length ? items.map(l=>`<div class="lead-result">
+      <div class="result-company"><div class="company-name">${escapeHtml(l.company)}</div><div class="company-meta">${escapeHtml(l.industry)} · ${escapeHtml(l.location)} · ${l.employees} employees</div></div>
+      <div><div class="score">${l.intent}<small>Intent score</small></div></div><div><div class="score">${l.fit}<small>Fit score</small></div></div>
+      <div><span class="pill hot">${escapeHtml(l.signal)}</span></div><button class="btn primary add-lead" data-id="${l.id}">Add to universe</button>
+    </div>`).join("") : `<div class="card empty">No prospects found. Adjust your ICP or filters and run another scan.</div>`;
+  }
+
+  function renderSignals(){
+    const q=$("signalSearch").value.trim().toLowerCase();
+    const items=state.signals.filter(s=>!q || [s.company,s.signal,s.action].join(" ").toLowerCase().includes(q));
+    $("signalsList").innerHTML=items.map(s=>`<div class="signal"><div class="signal-left"><div class="signal-title">${escapeHtml(s.company)} <span class="pill ${s.strength>=90?"hot":s.strength>=80?"good":"warn"}">${s.strength} strength</span></div><div class="signal-company">${escapeHtml(s.signal)} · detected ${escapeHtml(s.time)}</div></div><button class="btn signal-action" data-company="${escapeHtml(s.company)}">${escapeHtml(s.action)}</button></div>`).join("");
+  }
+
+  function renderWorkflows(){
+    $("workflowGrid").innerHTML=state.workflows.map(w=>`<div class="card"><div class="wf-top"><div><h2>${escapeHtml(w.name)}</h2><div class="sub">${w.on?"Active":"Paused"} workflow</div></div><button class="toggle ${w.on?"on":""}" data-wf="${w.id}" aria-label="Toggle ${escapeHtml(w.name)}"><i></i></button></div><div class="wf-flow"><div class="wf-node"><b>Trigger</b>${escapeHtml(w.trigger)}</div><div class="wf-node"><b>Action</b>${escapeHtml(w.action)}</div></div><div class="wf-footer"><span>${w.executions.toLocaleString()} executions</span><span>Last run ${escapeHtml(w.last)}</span></div></div>`).join("");
+  }
+
+  function renderPipeline(){
+    const stages=Object.keys(state.pipeline);
+    $("pipelineBoard").innerHTML=stages.map(stage=>`<div class="stage"><div class="stage-head"><span class="stage-title">${stage}</span><span class="stage-count">${state.pipeline[stage].length}</span></div>${state.pipeline[stage].map(d=>`<div class="deal"><strong>${escapeHtml(d[0])}</strong><div class="deal-meta">${d[2]}% probability</div><div class="deal-value">${escapeHtml(d[1])}</div><div class="deal-signal">${escapeHtml(d[3])}</div></div>`).join("")}</div>`).join("");
+  }
+
+  function renderUsage(){
+    const items=[["Leads discovered",184,250],["Enrichments",72,100],["API calls",218,500],["Automation executions",19,25]];
+    $("usageBars").innerHTML=items.map(x=>`<div class="usage-item"><div class="usage-head"><span>${x[0]}</span><b>${x[1].toLocaleString()} / ${x[2].toLocaleString()}</b></div><div class="bar"><i style="width:${Math.min(100,x[1]/x[2]*100)}%"></i></div></div>`).join("");
+  }
+
+  function renderEndpoints(){
+    const endpoints=[
+      ["GET","/api/health"],["GET","/api/me"],["GET","/api/leads"],["GET","/api/usage"],
+      ["POST","/api/clients/search"],["POST","/api/payment/create"],["POST","/api/auth/logout"]
+    ];
+    $("endpointList").innerHTML=endpoints.map(e=>`<button class="endpoint ${state.currentEndpoint.method===e[0]&&state.currentEndpoint.path===e[1]?"active":""}" data-method="${e[0]}" data-path="${e[1]}"><span class="method">${e[0]}</span><span class="endpoint-path">${e[1]}</span></button>`).join("");
+  }
+
+  async function healthCheck(){
+    $("healthText").textContent="Checking connection…"; $("settingsHealthText").textContent="Checking connection…";
+    try{
+      const r=await api("/api/health");
+      state.demo=!!r.demo;
+      updateModeUI();
+      $("healthLight").classList.add("ok");$("settingsHealthLight").classList.add("ok");
+      $("healthText").textContent=r.demo?"Demo fallback active":"Backend online";
+      $("healthSub").textContent=r.demo?"No backend URL configured":"HTTP "+r.status+" · "+r.responseTime+" ms";
+      $("settingsHealthText").textContent=r.demo?"Demo mode":"Backend connected";
+      $("settingsHealthSub").textContent=r.demo?"No backend URL configured.":"Health endpoint responded in "+r.responseTime+" ms.";
+      toast(r.demo?"Demo mode is healthy.":"Backend health check passed.");
+      return r;
+    }catch(error){
+      state.demo=false;
+      $("healthLight").classList.remove("ok");$("settingsHealthLight").classList.remove("ok");
+      $("healthText").textContent="Backend unavailable";$("healthSub").textContent=error.message;
+      $("settingsHealthText").textContent="Connection failed";$("settingsHealthSub").textContent=error.message;
+      toast("Backend unavailable: "+error.message);
+      return null;
+    }
+  }
+
+  function updateModeUI(){
+    $("modeLabel").textContent=state.demo?"DEMO MODE":"LIVE API";
+    $("modeLabel").style.color=state.demo?"var(--green)":"var(--cyan)";
+    $("modeDescription").textContent=state.demo?"Connect a backend API in Settings to activate live intelligence.":"Frontend connected to your configured public API origin.";
+    $("apiBaseInput").value=state.apiBase;
+  }
+
+  async function runDiscovery(){
+    const btn=$("discoverBtn"), original=btn.textContent;
+    btn.disabled=true;btn.textContent="Scanning market…";
+    const body={
+      query:$("icpInput").value.trim(),
+      industry:$("industryFilter").value,
+      company_size:$("sizeFilter").value,
+      location:$("locationFilter").value.trim(),
+      revenue:$("revenueFilter").value,
+      technology:$("technologyFilter").value.trim(),
+      intent_threshold:$("intentFilter").value,
+      employee_range:$("employeeFilter").value.trim()
+    };
+    try{
+      const r=await api("/api/clients/search",{method:"POST",body});
+      const items=r.data?.items || (Array.isArray(r.data)?r.data:state.discovery);
+      state.discovery=items.map((x,i)=>({...x,id:x.id||("d"+Date.now()+i)}));
+      renderDiscovery(state.discovery);
+      toast(r.demo?"Demo intelligence scan complete.":"Live discovery scan complete.");
+    }catch(error){ toast("Discovery failed: "+error.message); }
+    finally{btn.disabled=false;btn.textContent=original}
+  }
+
+  async function sendConsoleRequest(){
+    const button=$("sendRequest");button.disabled=true;button.textContent="Sending…";
+    $("consoleStatus").textContent="RUNNING";$("consoleMeta").textContent="Request in progress";
+    let body;
+    try{body=$("requestBody").value.trim()?JSON.parse($("requestBody").value):{};}catch(e){toast("Request body is not valid JSON.");button.disabled=false;button.textContent="Send Request";return}
+    try{
+      const r=await api(state.currentEndpoint.path,{method:state.currentEndpoint.method,body:state.currentEndpoint.method==="GET"?undefined:body});
+      $("responseViewer").textContent=JSON.stringify(r.data,null,2);
+      $("consoleStatus").textContent="HTTP "+r.status;$("consoleMeta").textContent=(r.demo?"DEMO · ":"LIVE · ")+r.responseTime+" ms";
+      toast(r.demo?"Demo response returned.":"Live API response received.");
+    }catch(error){
+      $("consoleStatus").textContent=error.status?"HTTP "+error.status:"ERROR";$("consoleMeta").textContent=error.responseTime+" ms";
+      $("responseViewer").textContent=JSON.stringify({error:error.message},null,2);toast("API request failed.");
+    }finally{button.disabled=false;button.textContent="Send Request"}
+  }
+
+  function init(){
+    loadRuntimeBase();updateModeUI();renderHighIntent();renderEvents("eventList");renderEvents("analyticsEvents");renderSpark("discoverySpark");renderSpark("analyticsSpark",[35,44,51,46,63,58,72,76,71,84,91,96]);renderUniverse();renderDiscovery();renderSignals();renderWorkflows();renderPipeline();renderUsage();renderEndpoints();
+    $("healthLight").classList.toggle("ok",!state.demo);$("settingsHealthLight").classList.toggle("ok",!state.demo);
+
+    document.querySelectorAll(".nav button").forEach(btn=>btn.addEventListener("click",()=>showView(btn.dataset.view)));
+    document.querySelectorAll("[data-go]").forEach(btn=>btn.addEventListener("click",()=>showView(btn.dataset.go)));
+    $("mobileMenu").addEventListener("click",()=>{$("sidebar").classList.add("open");$("drawerBackdrop").classList.add("open")});
+    $("drawerBackdrop").addEventListener("click",()=>{$("sidebar").classList.remove("open");$("drawerBackdrop").classList.remove("open")});
+
+    $("refreshOverview").addEventListener("click",async()=>{await healthCheck();renderEvents("eventList");toast("Command center refreshed.");});
+    $("healthCheck").addEventListener("click",healthCheck);$("healthTop").addEventListener("click",healthCheck);
+    $("discoverBtn").addEventListener("click",runDiscovery);
+    $("clearDiscovery").addEventListener("click",()=>{["icpInput","locationFilter","technologyFilter","employeeFilter"].forEach(id=>$(id).value="");$("industryFilter").selectedIndex=0;$("sizeFilter").selectedIndex=0;$("revenueFilter").selectedIndex=0;$("intentFilter").selectedIndex=0;renderDiscovery([]);toast("Discovery filters reset.");});
+    $("universeSearch").addEventListener("input",renderUniverse);$("statusFilter").addEventListener("change",renderUniverse);
+    $("signalSearch").addEventListener("input",renderSignals);
+    $("refreshSignals").addEventListener("click",()=>{state.signals=state.signals.map(s=>({...s,strength:Math.min(99,s.strength+1)}));renderSignals();toast("Signal engine rescanned.");});
+    $("pipelineRefresh").addEventListener("click",()=>{renderPipeline();toast("Forecast recalculated from current pipeline.");});
+    $("newWorkflow").addEventListener("click",()=>{state.workflows.push({id:Date.now(),name:"Custom Revenue Workflow",trigger:"Configure trigger",action:"Configure action",executions:0,last:"Never",on:false});renderWorkflows();toast("New workflow created in draft state.");});
+    $("exportJson").addEventListener("click",()=>{const blob=new Blob([JSON.stringify(state.leads,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="leadflow-universe.json";a.click();URL.revokeObjectURL(url);toast("Lead universe exported as JSON.");});
+    $("saveApiBase").addEventListener("click",async()=>{const url=normalizeBase($("apiBaseInput").value);if(url && !/^https?:\/\/[^\\s]+$/i.test(url)){toast("Enter a valid http(s) backend URL.");return}state.apiBase=url;state.demo=!url;try{if(url)sessionStorage.setItem("leadflow_api_base",url);else sessionStorage.removeItem("leadflow_api_base")}catch(e){}updateModeUI();await healthCheck();});
+    $("clearApiBase").addEventListener("click",()=>{state.apiBase="";state.demo=true;try{sessionStorage.removeItem("leadflow_api_base")}catch(e){}updateModeUI();healthCheck();toast("Demo mode enabled.");});
+    $("loadProfile").addEventListener("click",async()=>{try{const r=await api("/api/me");$("accountEmail").value=r.data?.email || "Not provided";toast(r.demo?"Demo profile loaded.":"Profile loaded from backend.");}catch(e){toast("Could not load profile: "+e.message)}});
+    $("logoutBtn").addEventListener("click",async()=>{try{await api("/api/auth/logout",{method:"POST",body:{}});toast("Logout request completed.");}catch(e){toast("Logout failed: "+e.message)}});
+    $("upgradePro").addEventListener("click",async()=>{try{const r=await api("/api/payment/create",{method:"POST",body:{plan:"PRO",amount:499,currency:"INR"}});if(r.demo)toast("Demo mode: payment creation is disabled.");else toast("Payment session created by backend.");}catch(e){toast("Payment request failed: "+e.message)}});
+    $("contactEnterprise").addEventListener("click",()=>toast("Enterprise request noted. Connect this action to your backend sales workflow."));
+    $("explorerActive").addEventListener("click",()=>toast("Explorer is the current demo plan."));
+    $("telemetryPref").addEventListener("change",e=>toast(e.target.checked?"Telemetry animation enabled.":"Telemetry animation paused."));
+
+    $("sendRequest").addEventListener("click",sendConsoleRequest);
+    $("endpointList").addEventListener("click",e=>{const b=e.target.closest(".endpoint");if(!b)return;state.currentEndpoint={method:b.dataset.method,path:b.dataset.path};$("consoleTitle").textContent=b.dataset.method+" "+b.dataset.path;$("consoleMeta").textContent="No request sent";$("consoleStatus").textContent="READY";$("requestBody").value=state.currentEndpoint.path==="/api/clients/search"?JSON.stringify({query:"Indian B2B SaaS companies hiring sales teams."},null,2):"{}";renderEndpoints();});
+    $("universeBody").addEventListener("change",e=>{if(!e.target.classList.contains("status-select"))return;const lead=state.leads.find(l=>String(l.id)===e.target.dataset.id);if(lead){lead.status=e.target.value;lead.activity="Just now";renderUniverse();toast(lead.company+" moved to "+lead.status+".");}});
+    $("universeBody").addEventListener("click",e=>{const b=e.target.closest(".details-btn");if(!b)return;const l=state.leads.find(x=>String(x.id)===b.dataset.id);if(l)toast(`${l.company}: intent ${l.intent}, fit ${l.fit}, signal ${l.signal}.`);});
+    $("discoveryResults").addEventListener("click",e=>{const b=e.target.closest(".add-lead");if(!b)return;const l=state.discovery.find(x=>String(x.id)===b.dataset.id);if(!l)return;if(state.leads.some(x=>x.company===l.company)){toast("Account is already in the universe.");return}state.leads.unshift({...l,status:"New",owner:"Unassigned",activity:"Just now"});renderUniverse();renderHighIntent();b.textContent="Added";b.disabled=true;toast(l.company+" added to Lead Universe.");});
+    $("workflowGrid").addEventListener("click",e=>{const b=e.target.closest(".toggle");if(!b)return;const w=state.workflows.find(x=>String(x.id)===b.dataset.wf);if(w){w.on=!w.on;renderWorkflows();toast(w.name+(w.on?" enabled.":" paused."));}});
+    $("signalsList").addEventListener("click",e=>{const b=e.target.closest(".signal-action");if(b)toast("Action queued for "+b.dataset.company+".");});
+
+    // Keyboard shortcut: / focuses the primary search when not typing.
+    document.addEventListener("keydown",e=>{if(e.key==="/" && !["INPUT","TEXTAREA","SELECT"].includes(document.activeElement.tagName)){e.preventDefault();showView("universe");$("universeSearch").focus()}});
+  }
+  init();
+})();
+</script>
+</body>
+</html>
